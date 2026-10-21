@@ -4,7 +4,8 @@
 # installed: the Tauri launcher (launcher/, built here with npm and cargo) carries the game,
 # bash, Python and the libraries.
 #   Contents/MacOS/             bloodborne-launcher, bb-probe, bb-gpu-capabilities, bash
-#   Contents/Frameworks/        libbbgpu, MoltenVK, Vulkan loader, SDL3, FFmpeg
+#   Contents/Frameworks/        libbbgpu, the online module (libbbnet20), MoltenVK, Vulkan loader,
+#                               SDL3, FFmpeg
 #   Contents/Resources/game/    run.sh, scripts/, patches/, share/vulkan/icd.d/
 #   Contents/Resources/python/  standalone Python 3
 # Library references become @rpath ones and everything is signed again ad hoc (no Developer
@@ -61,6 +62,13 @@ mkdir -p "$frameworks" "$game/share/vulkan/icd.d"
 install -m755 launcher/src-tauri/target/release/bloodborne-overlay "$macos/"
 install -m755 "$runtime/out/bb-probe" "$runtime/out/bb-gpu-capabilities" "$deps/app-runtime/bin/bash" "$macos/"
 install -m755 "$gpudir/libbbgpu.dylib" "$frameworks/"
+# The online module (BB_ONLINE=1; run.sh finds it here), when the build has it: without its
+# libraries (protobuf, OpenSSL, miniupnpc) the app plays offline only.
+if [[ -f $gpudir/libbbnet20.dylib ]]; then
+    install -m755 "$gpudir/libbbnet20.dylib" "$frameworks/"
+else
+    echo "No online module ($gpudir/libbbnet20.dylib): the app plays offline only" >&2
+fi
 copy_deps() { # copy_deps FILE: the non-system libraries FILE links against, recursively
     local dep
     for dep in $(otool -L "$1" | awk 'NR > 1 {print $1}' | grep "^$deps/lib/"); do
@@ -71,7 +79,7 @@ copy_deps() { # copy_deps FILE: the non-system libraries FILE links against, rec
         fi
     done
 }
-for f in "$macos/bb-probe" "$macos/bb-gpu-capabilities" "$frameworks/libbbgpu.dylib"; do copy_deps "$f"; done
+for f in "$macos/bb-probe" "$macos/bb-gpu-capabilities" "$frameworks/"lib*.dylib; do copy_deps "$f"; done
 install -m755 "$(realpath "$deps/lib/libMoltenVK.dylib")" "$frameworks/libMoltenVK.dylib"
 cat > "$game/share/vulkan/icd.d/MoltenVK_icd.json" <<'EOF'
 {
