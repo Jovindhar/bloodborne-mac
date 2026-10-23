@@ -85,7 +85,16 @@ and about **44 FPS** in the clinic at the start of the game
 ([performance](docs/guide/performance.md)). Only one machine has been tested so far: results on
 other Macs are welcome.
 
-**New in 0.8.0:** character motion vectors no longer crash the game; the launcher and the
+**New in 0.8.2:** clothing lighting at high render resolutions no longer disappears after texture
+collection. The fix was checked at native 1440p on Metal and MoltenVK.
+[0.8.2 release notes](docs/releases/v0.8.2.md).
+
+**From 0.8.1:** the repeatable GX worker crash with live dynamic shadows is fixed on Metal and
+MoltenVK; a rejected tessellation pipeline no longer makes the shader cache rebuild every launch;
+and **MetalFX (Apple)** is an optional macOS upscaler. The big FPS overlay shows MetalFX and its
+render resolution. [0.8.1 release notes](docs/releases/v0.8.1.md).
+
+**From 0.8.0:** character motion vectors no longer crash the game; the launcher and the
 in-game menu share every setting, and the menu has the launcher's look, tabs and an on-screen
 keyboard; outputs above 1080p start again; an experimental **Metal renderer** (Advanced →
 Renderer) draws the game with Apple's Metal directly, usually faster; from bbport 0.6, a frame
@@ -93,9 +102,9 @@ rate that keeps physics right at any speed, effects that switch without a restar
 (16:10, 21:9, ...) and keyboard and mouse in Dark Souls III's layout. See
 [Release notes](docs/releases/v0.8.0.md).
 
-**Known issues:** characters are drawn black when the game renders more than about 3.5 million
-pixels (1440p without an upscaler, 4K with Quality); use a preset that renders less. See
-[Troubleshooting](docs/guide/troubleshooting.md#known-issues).
+**Known issues:** blood on already killed enemies can look pale after a save reload.
+See [Troubleshooting](docs/guide/troubleshooting.md#known-issues) for details and other things to
+know before playing.
 
 ## Documentation
 
@@ -134,7 +143,9 @@ recompiler and its CPU layer don't depend on macOS: other platforms can build on
 Built on [**bbport**](https://github.com/deadinside28/bloodborne_pc) by deadinside28, the native
 Linux port this project started from as a fork, and on [**shadPS4**](https://github.com/shadps4-emu/shadPS4):
 the loader, the PS4 runtime, the renderer and its extensions, the upscalers and the game patches
-come from them; bbport's releases are merged up to 0.51 and ported in parts from 0.6. This work adds the macOS
+come from them; bbport's releases are merged up to 0.51 and ported in parts from 0.6. Native Apple
+Metal FSR 4.1.1 upscaling is based on [**fsr4-native-macos**](https://github.com/UzenUPoZiTiV4ik/fsr4-native-macos)
+by UzenUPoZiTiV4ik. This work adds the macOS
 platform layer, the arm64 translator, the app and the recompiler. None of it would exist without
 the projects it is built on. Full list: [Credits and licenses](docs/CREDITS.md).
 

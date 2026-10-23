@@ -46,6 +46,7 @@ Changes taken from other ports of bbport, with thanks (details and commits in th
 - [FFmpeg](https://ffmpeg.org/) (LGPL)
 - [Mesa](https://www.mesa3d.org/) KosmicKrisp (MIT, optional)
 - [FSR-Vulkan](https://github.com/FireBurn/FSR-Vulkan) by FireBurn and the AMD FidelityFX SDK (MIT)
+- [fsr4-native-macos](https://github.com/UzenUPoZiTiV4ik/fsr4-native-macos) by UzenUPoZiTiV4ik (MIT), native Apple Metal FSR 4 / 4.1.1 upscaling pipeline
 - [LibAtrac9](https://github.com/Thealexbarney/LibAtrac9) (MIT)
 - [Dear ImGui](https://github.com/ocornut/imgui) (MIT)
 - [cpp-httplib](https://github.com/yhirose/cpp-httplib) by Yuji Hirose (MIT), in the online module
@@ -77,3 +78,12 @@ The launcher’s menu-bar/window restoration and Dock/taskbar handling follow
 [leari-mail/leari 5876482](https://github.com/leari-mail/leari/tree/5876482/src-tauri/src)
 (MIT, Pablo Souza). The launcher retains the original MIT notice; its hunter’s-sigil tray
 artwork is original and does not copy Leari or game assets.
+
+The launcher's character save format locations were checked against
+[Noxde/Bloodborne-save-editor at d8d0365](https://github.com/Noxde/Bloodborne-save-editor/tree/d8d03658f288fe747f819d0dc9a09c5f9d2e1668)
+(GPL-3.0). No source from that editor was copied; the launcher's parser and save workflow are
+independent. See the [launcher credits](https://github.com/bloodborne-native/bloodborne-launcher/blob/main/docs/CREDITS.md).
+The base HP and stamina progression values were checked against the public
+[Bloodborne Wiki Vitality](https://www.bloodborne-wiki.com/2015/05/vitality.html) and
+[Endurance](https://www.bloodborne-wiki.com/2015/05/endurance.html) tables
+([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)).

@@ -14,6 +14,17 @@ runs); their numbers come from other machines and architectures. Code taken from
 wiki, the commit message, a code comment) and recorded in the runtime's
 `docs/UPSTREAM.md`.
 
+## Save editor (launcher)
+
+- [x] Preview readable characters in each profile's save set: name, level, attributes, Blood
+  Echoes, Insight, playtime and journey (launcher `6f6f64a`).
+- [x] Edit offensive attributes, Blood Echoes and Insight with a full pre-edit backup, staged save swap, stale-preview
+  check and edited-save trophy marker (launcher `6f6f64a`).
+- [x] Add Vitality and Endurance with coherent saved HP and stamina values, and a level 544
+  Max all action (launcher `1697795`; see `launcher/docs/SAVE_MANAGER.md`).
+- [ ] Verify other character fields and inventory one at a time.
+- [ ] Import/export complete save sets and manage backup history.
+
 ## 1. Small fixes (runtime)
 
 Landed in runtime `63f043a` (2026-10-19); each fix logs when it acts.
@@ -31,6 +42,8 @@ Landed in runtime `63f043a` (2026-10-19); each fix logs when it acts.
 - [x] **A flip IRQ ahead of its label** waits briefly instead of stopping (fork `76f5b5f`, from Awaken).
 - [x] Two copied-save playtests with lamp travel and fights: no fault, none of the fallbacks fired.
 - [ ] Release notes (next release).
+- [x] Trophy notifications draw in the game's ImGui overlay after a persisted unlock; the
+  launcher only records and lists trophies (runtime and launcher main, 2026-10-22).
 
 ## 2. GPU crash with character motion vectors
 
@@ -43,8 +56,8 @@ Landed in runtime `63f043a` (2026-10-19); each fix logs when it acts.
   one; turning argument buffers off cost ~85% FPS). The pre-boss backup's boss was won; a
   20-minute launcher session had no crash at 50–65 FPS.
 - [ ] Frame-rate A/B of the three changes (expected nil).
-- [ ] Next release: notes, and motion vectors recommended again (the image gets much better for
-  a small frame-rate cost).
+- [x] 0.8.0 release notes recommend motion vectors again for the sharper moving image at a small
+  frame-rate cost.
 - [x] In-game menu values out of sync with the actual settings: the launcher keeps the settings
   in its database and the game and launcher exchange changes while it runs (runtime `8cbcf64`,
   launcher `1dc03d8`, 2026-10-20). The menu shows every launcher graphics setting under the same
@@ -143,29 +156,47 @@ choice for laptops with two GPUs, the old shadNet module (shadPS4's server refus
   - [x] The frame drawn through Metal behind `BB_METAL_FRAME=1` (runtime `1992ecf`): 65.5/61.7 FPS
     against 58.0/58.1 on MoltenVK in two alternating pairs; MoltenVK stays the default.
   - [x] A renderer choice in the launcher and the in-game menu (MoltenVK / Metal, experimental).
-  - [ ] Resources created in Metal; then MoltenVK can be left out on macOS.
+  - [x] MetalFX as a macOS upscaler choice with either renderer (runtime PR #2, launcher PR #1;
+    1080p Balanced on an M3 Pro: 23.9 ms median against FSR 3.1's 21.3 ms in one copied-save
+    scene). Its name and render resolution appear in the big FPS overlay.
+  - [x] The [render adapter](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/RENDER_ADAPTER.md)
+    specified and approved: the project's own GPU interface, with Vulkan and Metal backends,
+    replacing the Metal interception layer.
+  - [x] Adapter A0–A6: the renderer moved onto it with the Vulkan backend, each step measured
+    (runtime `d6e8199`).
+  - [ ] Adapter M1–M4: the Metal backend (resources created in Metal); then MoltenVK is left
+    out on macOS.
+  - [ ] Pipelines created in Metal own their shaders, and unused shaders are freed. Today the
+    shadow layer keeps every compiled shader for the session (runtime `e0348c2`), because Metal
+    pipelines point at shaders that Vulkan handles may outlive or reuse.
 - [ ] Later: DiAvisoo/bbport-mac-optimized and Huax-1839/bloodborne-macos, which they cite.
 
-## 6. Visual bugs (older, reported 2026-10-19)
+## 6. Visual bugs
 
-- [ ] **Blood decals** on floors and walls are drawn as pale speckles with bright rims instead of
-  dark red pools. Also the stains the game restores from the save on reload: the problem is in
-  drawing the stains (texture or blend), not in the hit effect.
-- [ ] **An enemy's body drawn as colour noise** (a dog, after it attacked the player): probably
-  the same blood/wet effect on characters.
+- [ ] **Blood on already killed enemies after a save reload** can be pale with bright edges
+  instead of dark red. The cause has not been isolated.
 
 ## 7. Launcher and tooling
 
 - [x] **Outputs above 1080p start again** (runtime `74c556e`): the pool is imported in
   overlapping windows and direct memory follows the scene size; the Graphics page and the menu
   estimate memory against the Mac's.
-- [ ] **Characters drawn black above about 3.5 million scene pixels** (1440p native, 4K Quality),
-  with or without FSR and with more memory: a fixed limit in the game or in MoltenVK. Compare
-  with a native Metal path (R5).
+- [x] **Character lighting above about 3.5 million scene pixels:** the texture collector kept
+  GPU-written images whose contents could not safely be downloaded. Native 1440p clothing
+  highlights returned on Metal and MoltenVK with normal collection active (runtime `b2ff9cd`).
+  Over the critical memory mark they are freed again, so memory stays bounded (runtime `ab31a4c`).
 - [x] **Trophy notices only over the game** (launcher `6f626d7`), sent without waiting for SDL's
   focus (runtime `77bcc30`), activation handed back to the game (launcher `4b9a90e`).
 
 - [x] **Keep test progress between test runs:** `KEEP_SAVE=1` (`test_run.sh`).
+- [x] **Tests for the in-game trophy notices** (queue, and only new eligible unlocks; runtime
+  `2425cff`) and **CPU tests in bloodborne-recomp's CI** on Apple Silicon.
+- [x] **Native 1080p GX worker crash:** live dynamic shadows keep the game's disabled state in a
+  secondary render context without a shadow target (runtime `e8e14a3`). Copied-save tests passed
+  on both renderers, including a five-minute Metal run with left turns.
+- [x] **Recurring shader-cache rebuild:** save only successful pipeline keys (runtime `e8e14a3`),
+  emit each tessellation output location once (runtime PR #3), and rebuild older shader binaries
+  once (`0e940e9`). A warm launch reused the cache without the damaged-entry warning.
 - [ ] **Background shader compilation:** a missing pipeline compiles on a worker and its draw is
   skipped until ready (no hitches the first time an area is seen), behind a setting.
 

@@ -29,15 +29,12 @@ Please do not report problems with this port to shadPS4 or to bbport.
 
 ## Known issues
 
-- **Characters drawn black at very high render sizes.** When the game renders more than about 3.5
-  million pixels (1440p without an upscaler or with Native AA, 4K with Quality), characters are
-  black while the scenery is lit, on both renderers. Use a preset that renders less (1440p
-  Balanced, 4K Balanced). The cause is still being investigated.
+- **Blood on already killed enemies** can look pale with bright edges after reloading a save.
+
+## Good to know
+
 - **The Metal renderer is experimental.** If the picture or stability is wrong with it, switch
   back to MoltenVK (Advanced → Renderer) and report what you saw.
-- **The opening video** can show a short white flash; it plays to the end.
-- **Blood stains** can look pale with bright edges, and one enemy's body was seen drawn as
-  colour noise.
 - **Offline only:** online play is not available on macOS yet.
 - *The Old Hunters*: the Game of the Year editions include it; add-on packages in
   `user/addcont/` are not tested on macOS.
@@ -46,6 +43,9 @@ Please do not report problems with this port to shadPS4 or to bbport.
 
 | Problem | Fixed in |
 |---|---|
+| Character clothing lost its lighting at native 1440p after texture collection | 0.8.2 |
+| A GX worker crash during loading or turning in the level, on Metal or MoltenVK | 0.8.1 |
+| The shader cache rebuilt at every launch after a tessellation shader failed | 0.8.1 |
 | The game stopped with "Lost VkDevice ... Invalid Resource" (`VK_ERROR_OUT_OF_DEVICE_MEMORY`), mostly with character motion vectors on | 0.8.0 |
 | 1440p and 4K stopped at the loading screen | 0.8.0 |
 | Stretched scenery, missing walls, objects popping in and a black sky with streaks after visiting a few areas | 0.7.0 |

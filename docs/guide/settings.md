@@ -47,6 +47,13 @@ Advanced options apply at the next start.
 On a Mac the game is limited by the GPU, so the upscaler matters most:
 
 - **Upscaler:** FSR 3.1 with the *Balanced* or *Performance* preset.
+- **AMD FSR 4.1.1 (Metal):** AMD's neural upscaler (its Lite model), run on the Mac's GPU. It
+  costs more than FSR 3.1: on an M3 Pro at 1080p output (Balanced), 4.8 ms of GPU time a frame,
+  about 40 instead of 46 FPS. It suits Macs with frame-rate headroom, or a 30 FPS limit. It needs
+  two files of AMD's model from your own copy of AMD's upscaler DLL
+  (`amd_fidelityfx_upscaler_dx12.dll` 4.1.1, from OptiScaler or a game): in **Graphics**, *AMD
+  FSR 4.1.1 files* → **Choose AMD DLL…**. The option appears in Upscaler only when this Mac can
+  run it and the files are there.
 - **Character motion vectors:** off by default. They make moving characters much sharper with
   FSR for a few frames per second.
 - **Output above 1080p:** use an upscaler preset; the memory estimate (Graphics, and the menu)
@@ -78,8 +85,8 @@ By default the launcher hides to the menu bar while the game runs and comes back
 Its menu-bar icon has **Show launcher** and **Stop game**. To keep the launcher and its Log tab
 visible, turn off Advanced → Launcher → **Hide launcher during gameplay**.
 
-**Trophy notifications** (Advanced → Launcher, on by default) appear over the game when you earn
-a trophy, only while the game is in front. Turning them off saved about 2 FPS in one test.
+**Trophy notifications** (Advanced → Launcher, on by default) appear in the game's own overlay
+when you earn a trophy. The launcher still records trophies when notifications are off.
 
 ## Languages
 

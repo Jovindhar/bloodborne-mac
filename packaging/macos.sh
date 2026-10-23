@@ -53,13 +53,12 @@ frameworks=$app/Contents/Frameworks
 game=$app/Contents/Resources/game
 
 # The launcher (Tauri: React interface, Rust backend), the bundle the rest goes into.
+cmp runtime/gpu/shim/trophy_catalog.json launcher/src/lib/trophy-text/trophy_catalog.json
 (cd launcher && { [[ -d node_modules ]] || npm ci; } && npx tauri build --bundles app)
-(cd launcher/src-tauri && cargo build --release --bin bloodborne-overlay --features tauri/custom-protocol)
 cp -R launcher/src-tauri/target/release/bundle/macos/Bloodborne.app "$app"
 plutil -replace CFBundleShortVersionString -string "$short_version" "$app/Contents/Info.plist"
 plutil -replace CFBundleVersion -string "$version" "$app/Contents/Info.plist"
 mkdir -p "$frameworks" "$game/share/vulkan/icd.d"
-install -m755 launcher/src-tauri/target/release/bloodborne-overlay "$macos/"
 install -m755 "$runtime/out/bb-probe" "$runtime/out/bb-gpu-capabilities" "$deps/app-runtime/bin/bash" "$macos/"
 install -m755 "$gpudir/libbbgpu.dylib" "$frameworks/"
 # The online module (BB_ONLINE=1; run.sh finds it here), when the build has it: without its
@@ -114,13 +113,20 @@ strip -x "$macos/bb-probe" "$macos/bb-gpu-capabilities" "$frameworks/"*.dylib 2>
 
 cp "$runtime/run.sh" LICENSE README.md "$game/"
 cp -R "$runtime/scripts" "$runtime/patches" "$game/"
+# FSR 4.1.1 on Metal: the kernels and model layouts runtime/'s build made (no sources, no tools;
+# AMD's initializers stay with the player).
+if [[ -d $runtime/out/fsr4_metal ]]; then
+    rsync -a --exclude .built "$runtime/out/fsr4_metal/" "$game/fsr4_metal/"
+    mkdir -p "$game/tools"
+    cp "$runtime/tools/fsr4_metal_initializers.sh" "$game/tools/"
+fi
 cp -R "$deps/app-runtime/python" "$app/Contents/Resources/python"
 find "$app" -name __pycache__ -type d -prune -exec rm -rf {} +
 # Ad-hoc signatures, inside out (libraries, helpers, Python's binaries, then the bundle).
 codesign --force --sign - "$frameworks/"*.dylib
 find "$app/Contents/Resources/python" -type f \( -perm -u+x -o -name '*.so' -o -name '*.dylib' \) \
     -exec sh -c 'file -b "$1" | grep -q Mach-O && codesign --force --sign - "$1"' _ {} \;
-codesign --force --sign - "$macos/bb-probe" "$macos/bb-gpu-capabilities" "$macos/bash" "$macos/bloodborne-launcher" "$macos/bloodborne-overlay"
+codesign --force --sign - "$macos/bb-probe" "$macos/bb-gpu-capabilities" "$macos/bash" "$macos/bloodborne-launcher"
 codesign --force --sign - "$app"
 codesign --verify --deep --strict "$app"
 
