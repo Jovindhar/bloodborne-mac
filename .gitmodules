@@ -3,4 +3,4 @@
 	url = https://github.com/Jovindhar/bloodborne-runtime.git
 [submodule "launcher"]
 	path = launcher
-	url = https://github.com/bloodborne-native/bloodborne-launcher.git
+	url = https://github.com/Jovindhar/bloodborne-launcher.git
