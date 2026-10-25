@@ -20,7 +20,7 @@
 git clone --recursive https://github.com/bloodborne-native/bloodborne-mac.git
 cd bloodborne-mac
 bash runtime/build.sh                 # the game; the first run builds runtime/deps/ (about an hour)
-bash packaging/macos.sh               # Bloodborne.app and its DMG in dist/
+bash packaging/macos.sh               # BloodOnline.app and its DMG in dist/
 cd launcher && npm run tauri dev      # the launcher against runtime/ (npm run dev: browser preview)
 ```
 

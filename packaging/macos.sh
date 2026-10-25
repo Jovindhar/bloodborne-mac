@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# macOS: packages the current build (bash runtime/build.sh first) as Bloodborne.app in
-# dist/bloodborne_mac-<version>-<arch>.dmg. No game files are included. The app needs nothing
+# macOS: packages the current build (bash runtime/build.sh first) as BloodOnline.app (BB_APP_NAME) in
+# dist/BloodOnline-<version>-<arch>.dmg. No game files are included. The app needs nothing
 # installed: the Tauri launcher (launcher/, built here with npm and cargo) carries the game,
 # bash, Python and the libraries.
 #   Contents/MacOS/             bloodborne-launcher, bb-probe, bb-gpu-capabilities, bash
@@ -30,17 +30,20 @@ done
 deps=$(cd "$deps" && pwd -P)
 version=${BB_VERSION:-$(git describe --tags --always --dirty 2>/dev/null || echo dev)}
 short_version=$(sed -E 's/^v//; s/[^0-9.].*$//' <<< "$version"); [[ -n $short_version ]] || short_version=0.0.0
-name=bloodborne_mac-$version-$arch
+# The app's name (online-bbnet20: BloodOnline, the online build): the bundle, the DMG and its volume.
+app_name=${BB_APP_NAME:-BloodOnline}
+name=$app_name-$version-$arch
 work=dist/$name
-app=$work/Bloodborne.app
+app=$work/$app_name.app
 # Limit cleanup to direct children of dist; unlink symlinks rather than following them.
-python3 - "$work" "dist/$name.dmg" <<'CLEANUP'
+python3 - "$app_name-" "$work" "dist/$name.dmg" <<'CLEANUP'
 from pathlib import Path
 import shutil, sys
 root = Path("dist").resolve()
-for value in sys.argv[1:]:
+prefix = sys.argv[1]
+for value in sys.argv[2:]:
     path = Path(value)
-    if path.parent.resolve() != root or not path.name.startswith("bloodborne_mac-"):
+    if path.parent.resolve() != root or not path.name.startswith(prefix):
         raise SystemExit("Invalid packaging output path")
     if path.is_symlink() or path.is_file():
         path.unlink()
@@ -56,6 +59,8 @@ game=$app/Contents/Resources/game
 cmp runtime/gpu/shim/trophy_catalog.json launcher/src/lib/trophy-text/trophy_catalog.json
 (cd launcher && { [[ -d node_modules ]] || npm ci; } && npx tauri build --bundles app)
 cp -R launcher/src-tauri/target/release/bundle/macos/Bloodborne.app "$app"
+plutil -replace CFBundleName -string "$app_name" "$app/Contents/Info.plist"
+plutil -replace CFBundleDisplayName -string "$app_name" "$app/Contents/Info.plist"
 plutil -replace CFBundleShortVersionString -string "$short_version" "$app/Contents/Info.plist"
 plutil -replace CFBundleVersion -string "$version" "$app/Contents/Info.plist"
 mkdir -p "$frameworks" "$game/share/vulkan/icd.d"
@@ -132,12 +137,12 @@ codesign --verify --deep --strict "$app"
 
 ln -s /Applications "$work/Applications"
 cat > "$work/First start.txt" <<EOF
-Bloodborne for Apple Silicon ($version)
+$app_name: Bloodborne for Apple Silicon, with online co-op ($version)
 
-1. Drag Bloodborne to Applications.
-2. The first time, right-click Bloodborne and choose Open, then Open again (the app is not
+1. Drag $app_name to Applications.
+2. The first time, right-click $app_name and choose Open, then Open again (the app is not
    signed with an Apple Developer ID). If macOS still refuses: System Settings → Privacy &
-   Security → Open Anyway. Or, in Terminal: xattr -dr com.apple.quarantine /Applications/Bloodborne.app
+   Security → Open Anyway. Or, in Terminal: xattr -dr com.apple.quarantine /Applications/$app_name.app
 3. Create your first profile when prompted. Updates adopt existing saves into that profile;
    additional profiles start with new saves.
 4. Choose your Bloodborne dump (version 1.09; any edition with the same executable) and press Play.
@@ -150,5 +155,5 @@ No game files are included. Saves, settings and logs:
 
 https://github.com/bloodborne-native/bloodborne-mac
 EOF
-hdiutil create -quiet -volname "Bloodborne" -srcfolder "$work" -ov -format UDZO "dist/$name.dmg"
+hdiutil create -quiet -volname "$app_name" -srcfolder "$work" -ov -format UDZO "dist/$name.dmg"
 ls -lh "dist/$name.dmg"
