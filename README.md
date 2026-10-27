@@ -157,7 +157,9 @@ by UzenUPoZiTiV4ik. This work adds the macOS
 platform layer, the arm64 translator, the app and the recompiler. None of it would exist without
 the projects it is built on. Full list: [Credits and licenses](docs/CREDITS.md).
 
-Licensed under the [GNU GPL v2 or later](LICENSE).
+Licensed under the [GNU GPL v2 or later](LICENSE). The online module (the runtime's `gpu/bbnet20`) includes droogie/bbhost's
+GPL-3.0-or-later code, so that module, and the app that ships it, are under the
+[GNU GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html).
 
 <sub>Not affiliated with shadPS4, Sony Interactive Entertainment, FromSoftware or AMD. Please do
 not report problems with this project to shadPS4 or to bbport.</sub>

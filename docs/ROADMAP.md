@@ -116,14 +116,15 @@ Features:
   [x] Button prompts for the device in use, on Metal and MoltenVK (runtime `bcf71cc`); [x] chords
   with Shift, Ctrl or Alt in the input capture (runtime `bcf71cc`); [x] keyboard hints and the
   mouse in the in-game menu and its on-screen keyboard (runtime `6dc0320`).
-- [ ] **Online (for 0.9.0 final; not in the release candidate):** Seamless Hunt and The Hunter's Dream on shadPS4 0.20's network code
-  (`libbbnet20`; The Hunter's Dream part is GPL-3.0-or-later, so the module is too). Dependencies
-  in `runtime/deps/packages.cmake` (Protobuf with Abseil, nlohmann_json, OpenSSL, miniupnpc,
-  epoll-shim), for Linux from shell.nix; the
-  launcher's Online page. Decided (maintainer, 2026-10-26): a save marked as edited plays offline
-  only; trophies stay local either way. The password is saved only after the player accepts a
-  warning that it is stored unencrypted; otherwise the launcher asks for it at each launch.
-  Tests with real accounts on both pools.
+- [x] **Online (0.9.0 final):** Seamless Hunt and The Hunter's Dream on shadPS4 0.20's network
+  code, the runtime's `gpu/bbnet20` (`libbbnet20`; The Hunter's Dream part is droogie/bbhost's,
+  GPL-3.0-or-later, so the module is too), runtime `49e2d2c`. Its libraries are pinned and linked
+  statically (`deps/packages.cmake`: Abseil, Protobuf, OpenSSL, nlohmann_json, miniupnpc,
+  epoll-shim); the launcher's Online page is shown (launcher `56a945f`). Decided (maintainer,
+  2026-10-26): a save marked as edited plays offline only; trophies stay local either way. The
+  password is saved only after the player accepts a warning that it is stored unencrypted;
+  otherwise the launcher asks for it at each launch. Tested here without an account (the module
+  loads, the server answers); players test both pools with 0.9.0 (maintainer, 2026-10-27).
 - [ ] **Seamless co-op (BBSC):** not supported for now (maintainer, 2026-10-26). BBSC's code is
   built on the game's internals (addresses, structures, decompiled behaviour), which no repository
   here may carry. The launcher's Online page says so. Planned depending on further development and
