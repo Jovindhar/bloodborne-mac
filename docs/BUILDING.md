@@ -4,7 +4,7 @@
 
 ## Requirements
 
-- A Mac with Apple Silicon (macOS 15 or newer recommended).
+- A Mac with Apple Silicon (macOS 15 or newer: the minimum the app declares and is built for).
 - Xcode Command Line Tools and [Homebrew](https://brew.sh):
 
   ```bash
@@ -24,15 +24,14 @@ bash packaging/macos.sh               # Bloodborne.app and its DMG in dist/
 cd launcher && npm run tauri dev      # the launcher against runtime/ (npm run dev: browser preview)
 ```
 
-- Run the game without the app: `BB_GAME_DIR=/path/to/game bash runtime/run.sh`. The runtime's
+- Run the game without the app, after building: `BB_GAME_DIR=/path/to/game bash runtime/run.sh`. The runtime's
   [building guide](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/BUILDING.md)
   has the environment, the test runners and how to measure.
 - The launcher's [README](../launcher/README.md) has its stack, conventions and checks.
-- `runtime/deps/` records absolute paths: after moving the checkout, remove
-  `runtime/deps/macos-arm64` and `runtime/out/gpu-arm64`, then
-  `BB_ARCH=arm64 bash runtime/scripts/macos/build-deps.sh` and `bash runtime/build.sh --test`. Never
-  move or reset the player's data folder to fix a build. Packaged apps do not depend on the
-  checkout's location.
+- The libraries in `runtime/deps/macos-arm64` are `@rpath` ones: moving the checkout needs no
+  rebuild of them, only `bash runtime/build.sh` again for the game's own binaries. Never move or
+  reset the player's data folder to fix a build. Packaged apps do not depend on the checkout's
+  location.
 
 ## Working across the repositories
 
@@ -46,8 +45,10 @@ App versions are this project's own; bbport's version only records imported comp
 maintainer chooses the number. The app and the bundled launcher always have the same version, so
 update checks compare correctly.
 
-1. Bump the version in the launcher: `package.json`, `package-lock.json` (two places),
-   `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, `src-tauri/tauri.conf.json`.
+1. Bump the version: `bash packaging/version.sh X.Y.Z` writes it to the launcher's
+   `package.json`, `package-lock.json` (two places), `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`
+   and `src-tauri/tauri.conf.json`; `bash packaging/version.sh --check` reports whether they agree
+   (the workflow does it against the tag).
 2. Write `docs/releases/vX.Y.Z.md`: what changed for players, known issues, how to install.
 3. Test this build: copied-save gameplay (`runtime/tools/test_run.sh`) and a new save through the
    opening video (`runtime/tools/test_opening_video.sh`); the maintainer approves.
