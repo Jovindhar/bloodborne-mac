@@ -12,7 +12,7 @@ runs.
 
 | Tab | What it has |
 |---|---|
-| **Home** | Your profile and trophies, the game folder and edition, a summary of the main settings |
+| **Home** | The game folder and edition, a summary of the main settings |
 | **Graphics** | Aspect ratio and output resolution with a memory estimate, monitor, fullscreen, V-Sync, frame-rate mode and limit, the FPS counter, upscaling and sharpening, character motion vectors, model detail, visual effects |
 | **Controls** | Which controller to use, and button mapping for controller and keyboard |
 | **Game** | Game language, skipping the intro videos, your save folder |

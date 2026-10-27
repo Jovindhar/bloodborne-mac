@@ -14,7 +14,8 @@ Play is available once the profile is created.
 ## Profiles
 
 - **New profile** (top of the Profiles tab): a new profile starts with no saves.
-- **Use profile**, or the **Active profile** selector above Play, chooses which one Play uses.
+- **Use profile**, or the profile above Play (its name and trophies: click it), chooses which one
+  Play uses. Its menu also opens the profile's saves and trophies.
 - Renaming a profile changes only its name.
 - **Delete** removes an inactive profile with its saves and backups, after a confirmation. The
   active profile and the last one cannot be deleted.
