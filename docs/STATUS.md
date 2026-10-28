@@ -14,9 +14,9 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 - **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
   renderer ([performance](guide/performance.md)).
 - **Now:** deciding 0.9.0 final; accepting the native Metal renderer (N5).
-- **Under way:** N6, the native renderer taking the engine's draws, on the runtime's `n6`
-  branch: the draws, their state and resources observed; mesh draws bind their resources from
-  the engine's draw state behind a switch (67%).
+- **Under way** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its
+  render boundary; mesh draws bind their resources from its draw state); N2, shaders built to
+  read the draw state instead of the PS4 user data, has its plan (20%).
 - **Next:** the recompiler's CPU work.
 
 ## Milestones
@@ -30,13 +30,14 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 | R3 · speed | 100% `████████████████████` | 14% less CPU time than the translator at the same frame rate |
 | The library built from the launcher | 100% `████████████████████` | 13.5 minutes on an M3 Pro, no Xcode needed |
 | R4 · names for the engine's code | 100% `████████████████████` | 204 functions named; the draw state, models, materials and shaders described |
-| The generator's CPU work | 0% `░░░░░░░░░░░░░░░░░░░░` | Next after N6 |
+| The generator's CPU work | 0% `░░░░░░░░░░░░░░░░░░░░` | Next after N2 |
 | **Graphics** (bloodborne-runtime) | | |
 | N0 · scope, N1 · frame planning | 100% `████████████████████` | Deferred clears |
 | N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
 | N5 · Metal backend | 95% `███████████████████░` | The default since 0.9.0 RC 1; the maintainer's play sessions passed; acceptance waits for players' reports on the release candidates and M1/M2 comparisons |
-| N6 · the engine's render boundary | 67% `█████████████░░░░░░░` | On the runtime's `n6` branch: the plan written; 99.94% of the engine's draws matched to their packets; their draw and output state agree with the decoded registers, and the textures, samplers and buffers their shaders read are the draw state's ([plan](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). Mesh draws bind their textures, samplers and buffers from the draw state (`BB_RENDER_BOUNDARY=mesh`; 50 million resources in two minutes, none differing). Next: skip the user-data walk for them and measure |
-| N2 · shaders ahead of time, N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N6 |
+| N6 · the engine's render boundary | 100% `████████████████████` | Done on the runtime's `n6` branch (re-scoped 2026-10-28): 99.94% of the engine's draws matched to their packets, their state and resources agreeing; every buffer address and resource slot found from the draw state; mesh draws bind their resources from it ([details](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). The other draw kinds move to N2: converted GCN shaders read the user data themselves, so taking draws over saves nothing until N2 |
+| N2 · shaders from the draw state, then ahead of time | 20% `████░░░░░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written ([steps](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time)). Next: the inventory of the shaders and how each reads its resources |
+| N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N2 |
 | **Platforms** | | |
 | macOS (Apple Silicon) | | Released |
 | iOS | proof of concept | 23 FPS on an iPhone 17 Pro Max; the steps to a real app are in the roadmap |

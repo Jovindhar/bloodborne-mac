@@ -90,10 +90,10 @@ been measured so far: results on other Macs are welcome.
 | | Progress | |
 |---|---|---|
 | CPU: recompiling the game's code (R0–R4) | `████████████████████` 100% | Every function runs recompiled; the engine's render code is named |
-| Graphics: the native renderer (N0–N6) | `█████████████░░░░░░░` 66% | Native Metal by default; taking the engine's draws directly (N6) under way on a branch |
+| Graphics: the native renderer (N0–N6) | `██████████████░░░░░░` 73% | Native Metal by default; the engine's draws taken at its render boundary (N6, on a branch); next, shaders reading the engine's draw state (N2) |
 
-**Next:** 0.9.0 final; then N6, the native renderer taking the engine's draws, and the
-recompiler's CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
+**Next:** 0.9.0 final; then N2, shaders that read the engine's draw state, and the recompiler's
+CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
 
 **Known issues:** blood on already killed enemies can look pale after a save reload; the camera
 after a cutscene sometimes starts in front of your character. See

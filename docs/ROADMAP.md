@@ -23,17 +23,15 @@ commit message, a code comment; the runtime's `docs/UPSTREAM.md` records them).
 
 In this order (maintainer, 2026-10-27; R4 was done first, on 2026-10-28):
 
-1. **N6, the engine's render boundary** (runtime): the native renderer takes the engine's draws at
-   CoreGraphics2's seven draw methods (85% of libGnm's draws), with their draw state, instead of
-   decoding PS4 command buffers. R4 named and described what it needs
-   ([recomp's annotations](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md#annotations)).
-   Under way on the runtime's `n6` branch (67%: the draws, their state and resources observed; mesh draws bind their resources from the draw state); its
-   steps are in that branch's
-   [NATIVE_RENDERER.md](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary).
+1. **N2, shaders from the draw state, then ahead of time** (runtime, on the `n6` branch with N6):
+   shaders built to read their resources from the engine's draw state, through the slots N6
+   found, instead of the PS4 user data; mesh draws first, the other draw kinds after, then
+   converted once ahead of time. Its steps are in that branch's
+   [NATIVE_RENDERER.md](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time).
 2. **The generator's CPU work** (recomp): flags only where they are read; a function's own stack
    frame as host locals when its address never escapes; memory ordering kept only around the
    engine's synchronization, which R4.4 named. These matter most on CPUs weaker than the Mac's.
-3. **N2, shaders ahead of time** and **N3, textures as objects** (runtime).
+3. **N3, textures as objects** (runtime).
 
 ## Later
 
@@ -134,6 +132,9 @@ Where each landed; the release notes say what changed for players.
 - MetalFX (runtime PR #2) on the native frame; FSR 4.1.1 on the Mac's GPU with the MoltenVK renderer
   (runtime #1, 0.8.3).
 - N0 (scope), N1 (frame planning: deferred clears).
+- N6, the engine's render boundary (runtime `n6` branch, 2026-10-28): the engine's draws matched to
+  their packets and observed; every buffer address and resource slot found from its draw state;
+  mesh draws bind their resources from it (`BB_RENDER_BOUNDARY=observe|mesh`).
 - Crashes fixed: character motion vectors (runtime `57fba4f`), the GX worker with live dynamic
   shadows (`e8e14a3`), outputs above 1080p (`74c556e`), character lighting above 3.5 million
   pixels (`b2ff9cd`, `ab31a4c`); the shader cache no longer rebuilds every launch (`e8e14a3`,
