@@ -262,8 +262,8 @@ Decided 2026-10-27, in this order.
   - The library and generated C stay in the player's data folder and are never uploaded (they
     are game code). The launcher records the recompiler version and the executable's hash; a
     stale or missing library falls back to Translated with the reason shown.
-- [ ] **R4 for the render boundary, then N6.** 51% `██████████░░░░░░░░░░` of its steps (recomp's
-  RECOMPILATION.md, "Annotations": R4.1 done, R4.2 83%, R4.3 75%, R4.4 and R4.5 not started). Names, objects and call sites for the engine's
+- [ ] **R4 for the render boundary, then N6.** 54% `██████████░░░░░░░░░░` of its steps (recomp's
+  RECOMPILATION.md, "Annotations": R4.1 done, R4.2 83%, R4.3 87%, R4.4 and R4.5 not started). Names, objects and call sites for the engine's
   render functions first (not every function), so the native renderer can take the engine's
   draws instead of decoding PS4 command buffers: what limits the frame rate on the Mac.
   Synchronization primitives next, signatures for the hottest functions after. Started before
@@ -288,9 +288,10 @@ Decided 2026-10-27, in this order.
     lighting (batches of up to 12 lights in full-screen quads limited by depth bounds; 18%, and
     5.9% from a variant) and an upload-ring draw (7.5%); with the mesh draw, about 96% of the
     calls at the 16 busiest call sites. The context's state setters (topology, vertex and index
-    buffers, the five shaders) are named. 130 functions in all. Left: the effect's program choice
-    and the material's parameter block (its textures and constants), the upload-ring draw's
-    callers, the compute passes.
+    buffers, the five shaders) are named, and the materials' textures (into the pixel stage, and
+    the domain stage for tessellation) and constants (parameter objects writing the material's
+    constant buffer). 139 functions in all. Left: the upload-ring draw's callers, the compute
+    passes.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
