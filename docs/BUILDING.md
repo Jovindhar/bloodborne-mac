@@ -99,7 +99,10 @@ update checks compare correctly.
 3. Test this build: copied-save gameplay (`runtime/tools/test_run.sh`) and a new save through the
    opening video (`runtime/tools/test_opening_video.sh`); the maintainer approves.
 4. Commit and push `main`, run the workflow on it (`gh workflow run macos.yml --ref main`; pushes do
-   not build) and check that it passes.
+   not build) and check that it passes. The workflow keeps the built dependencies and a compiler
+   cache between runs, so a run recompiles only what changed; with empty caches (or after a
+   dependency changed) it builds everything, about an hour. The launcher's checks run in its own
+   CI, and here only in the weekly build.
 5. `git tag -a vX.Y.Z -m "..."` (a release candidate: `vX.Y.Z-rc.N`, published as a GitHub
    pre-release that the launcher's update check skips; its notes say it is a candidate and what
    feedback is wanted) and push the tag: `.github/workflows/macos.yml` builds the DMG and
