@@ -273,9 +273,12 @@ Decided 2026-10-27, in this order.
   - [ ] R4.2, the draw boundary: the engine functions above libGnm's draws, shader, render target
     and texture methods, named from their call graph. First pass done: CoreGraphics2's seven draw
     and dispatch methods, the three state blocks they apply, the resource binder's steps and the
-    render-target passes (21 functions). Left: their callers, the shader resources step, and how
-    much of a frame goes through them (counted in the game).
-  - [ ] R4.3, their objects: the draw context, meshes and materials as structs.
+    render-target passes (21 functions), and counted in the game (`BB_DRAW_CENSUS`): 85% of the
+    draws through the seven methods, 7% compute passes, 2% render-target passes, 6% Scaleform.
+    Left: the shader resources step and the compute passes.
+  - [ ] R4.3, their objects: the draw context, meshes and materials as structs. Started: the draw
+    state each draw method takes (recomp `annotations/structs.h`: index buffer, viewports,
+    scissors, blend, depth-stencil, render targets).
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
