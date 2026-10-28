@@ -275,15 +275,21 @@ Decided 2026-10-27, in this order.
     and dispatch methods, the three state blocks they apply, the resource binder's steps and the
     render-target passes (21 functions), and counted in the game (`BB_DRAW_CENSUS`): 85% of the
     draws through the seven methods, 7% compute passes, 2% render-target passes, 6% Scaleform.
-    Left: the shader resources step and the compute passes.
+    The shader resources step is known (per stage: samplers, textures, constant buffers into the
+    binder's tables). Left: the compute passes.
   - [ ] R4.3, their objects: the draw context, meshes and materials as structs. Done so far
     (recomp `annotations/structs.h`): the draw state each draw method takes (Direct3D 11's model:
     input layout, 32 vertex buffers, index buffer, rasterizer, viewports, scissors, blend,
     depth-stencil, render targets, five shader stages with their samplers, textures and constant
     buffers), the shader object, models, meshes and face sets, and shader programs. 65% of the
     boundary's calls come from the mesh draw, and every mesh draw counted used one material class
-    (its shader program chosen by technique and pass type). Left: the effect's program choice and
-    the material's parameter block, the other draw callers, the compute passes.
+    (its shader program chosen by technique and pass type). The next callers are deferred
+    lighting (batches of up to 12 lights in full-screen quads limited by depth bounds; 18%, and
+    5.9% from a variant) and an upload-ring draw (7.5%); with the mesh draw, about 96% of the
+    calls at the 16 busiest call sites. The context's state setters (topology, vertex and index
+    buffers, the five shaders) are named. 130 functions in all. Left: the effect's program choice
+    and the material's parameter block (its textures and constants), the upload-ring draw's
+    callers, the compute passes.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
