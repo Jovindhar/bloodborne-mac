@@ -234,19 +234,23 @@ choice for laptops with two GPUs, the old shadNet module (shadPS4's server refus
 
 Decided 2026-10-27, in this order.
 
-- [ ] **The recompiled library from the launcher.** A "CPU: Translated / Recompiled" choice;
+- [x] **The recompiled library from the launcher** (recomp `aa47a95`, runtime `8d2d469`, launcher
+  `adec5ac`; the page *Recompiled code* under Settings). A "CPU: Translated / Recompiled" choice;
   Translated (bbcpu's JIT) stays the default, and Recompiled can be chosen once the library is
   built. The launcher explains it plainly: the game's code compiled for this Mac once, from the
   player's own copy, instead of translated while playing; less CPU time (about 14% at the 1st
   Floor Sickroom) at about the same frame rate, since frames on the Mac are bound by rendering.
   It does not call it native: the compiled code still keeps x86 behaviour (memory ordering, flags,
   registers in memory).
-  - The build: prepare (extract the executable, scan, generate the C; seconds), compile (383
-    files, about 12 minutes on an M3 Pro), link, verify. A progress bar counts the files compiled;
-    an interrupted build resumes with the files left.
+  - The build: prepare (extract the executable, scan, generate the C; about 3 minutes), compile
+    (384 files), link (`build_library.py`, from the app's kit). A progress bar counts the files
+    compiled; an interrupted build resumes with the files left. From the installed kit with the
+    published toolchain, 10 jobs on an M3 Pro: 13 min 35 s, and the game ran the library with no
+    faults.
   - The compiler: the launcher downloads a trimmed LLVM toolchain (clang, `ld64.lld`, clang's
-    headers; from an official LLVM release, Apache-2.0 with LLVM exception), hosted as a release
-    asset and checked against a SHA-256 pinned in the launcher, and deletes it after the build.
+    headers; from an official LLVM release, Apache-2.0 with LLVM exception), hosted as
+    bloodborne-recomp's `toolchain-llvm-23.1.4` release (70 MB) and checked against a SHA-256
+    pinned in the launcher, and deletes it after the build.
     The library is built without an SDK (`-nostdinc` with clang's headers and four stand-in
     headers, `-fno-stack-protector`, linked by `ld64.lld` with `-nostdlib -undefined
     dynamic_lookup`): its few unresolved helpers (`memcpy`, `memset`, 128-bit division) come from

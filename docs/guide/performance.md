@@ -25,5 +25,25 @@ Measured on an Apple M3 Pro (18-core GPU, 18 GB) with a 1080p output, on the cur
 - Only one Mac has been measured; results on other Macs are welcome in the
   [issues](https://github.com/bloodborne-native/bloodborne-mac/issues).
 
+## Recompiled code
+
+**Recompiled code** (in the launcher's menu, under Settings) compiles the game's code for your
+Mac once, from your own copy, instead of translating it while you play. The game then uses less
+processor time: about 14% less in our tests (344% of one core against 402% at the 1st Floor
+Sickroom lamp). The frame rate stays about the same, because the graphics set the pace on a Mac.
+
+- **Build the library** downloads a 70 MB compiler (LLVM), builds the library (about 14 minutes
+  on an M3 Pro; longer with fewer cores) and deletes the compiler. It needs about 3 GB free while
+  it runs; the library then takes about 330 MB. The page shows the step, the files compiled and
+  the time left. **Cancel** stops it; building again continues where it stopped.
+- Then choose **Recompiled** under *How the game's code runs*. **Translated while playing**
+  stays the default.
+- The library is built from your copy and stays on your Mac. It is used only while it matches
+  your game and the app's recompiler: after you change the game folder or update the app, the
+  page asks you to build it again, and until then the game's code is translated (the log's first
+  line says so).
+- The compiled code still behaves like the PS4's processor: it is not a native version of the
+  game.
+
 Where a frame's time goes and what has been tried: the runtime's
 [performance notes](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/PERFORMANCE.md).

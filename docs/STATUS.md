@@ -73,14 +73,16 @@ at the test save's place in Cathedral Ward (bloodborne-recomp #9–#12, 2026-10-
 frame rate. R3's follow-ups (plain accesses to a function's own frame, the calls still going into
 the translator, a 0.5 FPS gap at the Sickroom) are in bloodborne-recomp's docs.
 
-**The recompiled library from the launcher (in progress).** A library built with only LLVM
-23.1.4's official download (clang and `ld64.lld`, no Xcode or macOS SDK, `-nostdinc` with four
-stand-in headers) ran the game: 240,978 of 241,031 functions replaced, no faults. It leaves only
-`memcpy`, `memset` and 128-bit division helpers to the game process. `-ffreestanding` must not be
-used: it turns built-ins off, the code grows 32% and frames took 42.4 ms against 26.3 with the
-usual library. Compiling takes about 2 s a file with 8 jobs on an M3 Pro (384 files); linking 2 s.
-The official download is 1.5 GB, of which the build needs 342 MB. Plan:
-[roadmap](ROADMAP.md#8-after-090-final).
+**The recompiled library from the launcher (on main).** The launcher's *Recompiled code* page
+(Settings) builds the library on the player's device and offers Translated or Recompiled. It
+downloads LLVM 23.1.4's clang and `ld64.lld` (bloodborne-recomp's `toolchain-llvm-23.1.4` release,
+70 MB, SHA-256 pinned) and runs the app's recompiler kit (`build_library.py`): no Xcode or macOS
+SDK. From the installed kit on an M3 Pro (10 jobs): 13 min 35 s, 241,821 functions, a 330 MB
+library; the game ran it with 240,978 functions replaced, no faults, median frame 26.7 ms (26.3
+with the library built by Xcode's clang). Not `-ffreestanding`: it turns built-ins off, the code
+grew 32% and frames took 42.4 ms. The library is used only while it matches the game's executable
+and the kit's version
+([launcher docs](https://github.com/bloodborne-native/bloodborne-launcher/blob/main/docs/RECOMPILED_CODE.md)).
 
 **Watch list.** A short white flash in the opening video and an enemy's body drawn as colour
 noise have not recurred in recent play. Neither has a confirmed fix. Older rare assertions are in
