@@ -265,7 +265,14 @@ Decided 2026-10-27, in this order.
 - [ ] **R4 for the render boundary, then N6.** Names, objects and call sites for the engine's
   render functions first (not every function), so the native renderer can take the engine's
   draws instead of decoding PS4 command buffers: what limits the frame rate on the Mac.
-  Synchronization primitives next, signatures for the hottest functions after.
+  Synchronization primitives next, signatures for the hottest functions after. Started before
+  0.9.0 final (maintainer, 2026-10-28).
+  - [x] R4.1, the annotation file (recomp `annotations/functions.tsv`): the generator writes the
+    names into the generated C (comments only: the code is the same); libGnm's 80 command buffer
+    methods named.
+  - [ ] R4.2, the draw boundary: the engine functions above libGnm's draws, shader, render target
+    and texture methods, named from their call graph.
+  - [ ] R4.3, their objects: the draw context, meshes and materials as structs.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
