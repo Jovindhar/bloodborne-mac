@@ -39,6 +39,12 @@ cd launcher && npm run tauri dev      # the launcher against runtime/ (npm run d
 editing one, `git checkout main && git pull` inside it. Commit and push there first, then commit
 the new pointer in its parent (recomp → runtime → app; launcher → app) and push that.
 
+`main` in each repository has a ruleset: it cannot be deleted or force-pushed, and changes reach it
+through a pull request with one approval and the CI checks passed (runtime: `build`; recomp:
+`test`; launcher: `frontend` and `native (macos-15)`). Repository admins bypass it, so the
+maintainer pushes to `main` directly. Release tags (`v*` here, `toolchain-*` in recomp) cannot be
+moved or deleted. Merged branches are deleted.
+
 ## Releasing
 
 App versions are this project's own; bbport's version only records imported compatibility. The
