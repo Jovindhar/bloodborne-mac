@@ -2,13 +2,15 @@
 
 [← Documentation](README.md)
 
-What development main has, what is open, and how to pick each thread up. Updated 2026-10-26.
+What development main has, what is open, and how to pick each thread up. Updated 2026-10-28.
 The plan as a checklist is the [roadmap](ROADMAP.md).
 
 ## Releases
 
 | Version | Highlights |
 |---|---|
+| 0.9.0 RC 2 | Online play; the save editor (items, weapons, armor, gems); the launcher's new look, Saves and Trophies tabs; in-game menus in its colours; a Metal abort on the status page fixed; a faster translator; macOS 15 |
+| 0.9.0 RC 1 | Native Metal renderer by default (MoltenVK as the fallback); MetalFX on the native frame; button prompts for the device in use; keyboard and mouse in the in-game menu |
 | 0.8.3 | Mods and Patches pages fixed; character editing in every language; optional FSR 4.1.1 on Metal; trophy notices drawn by the game; instanced tessellated draws on Metal |
 | 0.8.2 | High-resolution character lighting fixed after texture collection |
 | 0.8.1 | GX worker crash fixed; MetalFX option; tessellation shader and recurring shader-cache rebuild fixed |
@@ -22,14 +24,15 @@ Imported bbport compatibility: 0.51, plus parts of 0.6 (below).
 
 | Area | State |
 |---|---|
-| bbport 0.6 | Ported: renderer fixes, the present's wait, frame rate through hooks (no measurable cost; F3 for 30 FPS), Laurence's cinematic fixes, live effects, aspect ratios, keyboard and mouse, button prompts for the device in use. Next: online for 0.9.0 final, without seamless co-op (BBSC) ([roadmap](ROADMAP.md#3-bbport-06-before-the-next-release)) |
+| bbport 0.6 | Ported: renderer fixes, the present's wait, frame rate through hooks (no measurable cost; F3 for 30 FPS), Laurence's cinematic fixes, live effects, aspect ratios, keyboard and mouse, button prompts for the device in use, and online (Seamless Hunt and The Hunter's Dream, without seamless co-op, BBSC) |
 | Hooks in the game's code | bbport's `InstallGuestCodeHook` interface on bbcpu: a stub `int3; replaced instructions; jmp back`, every register available to the hook |
 | Metal renderer | Native Metal is the default on Apple Silicon; MoltenVK remains selectable until M4 acceptance. The native path links or maps neither Vulkan nor MoltenVK. In one copied-save A/B pair it measured 34.4 FPS versus 33.2 on main, with the same 28.2 ms median and 32.1 versus 35.4 ms p90. The maintainer's play sessions passed (2026-10-26); acceptance waits for players' reports on the 0.9.0 release candidate, including M1/M2 capability comparisons |
 | FSR 4.1.1 on Metal | AMD's neural upscaler in Metal on Apple Silicon (runtime #1, from fsr4-native-macos), offered when the Mac can run it and the player has added AMD's model files from their own DLL. M3 Pro, 1080p Balanced: 4.2–4.8 ms of GPU time a frame, a few FPS below FSR 3.1 |
 | High-resolution character lighting | 0.8.2 keeps GPU-written images whose contents cannot safely be downloaded. Native 1440p clothing highlights returned on Metal and MoltenVK in copied-save runs. On main they are freed again over the critical memory mark (memory before lighting); native 1440p on the 18 GB M3 Pro stays about 2.4 GB below it |
 | Trophy notifications | The game draws notices in its ImGui overlay after a persisted unlock; the launcher imports and lists unlocked trophies |
-| Save editor | The launcher previews characters and edits all six attributes, Blood Echoes and Insight in a backed-up, staged save set; level and saved HP or stamina follow attribute changes. Max all reaches level 544. Edited saves cannot earn new trophies |
-| Launcher | Platform-neutral: system differences in `platform.rs` (macOS, Linux, Windows; CI on all three), texts that never name a system, a layout from phone width up. The Online page is in, hidden until the online module ships |
+| Save editor | One editor for a character: attributes, Blood Echoes and Insight; item amounts; adding items, weapons, armor and gems; a weapon's level and imprint, its gem slots following them as in the game; gems in and out of slots, and their effects' strength. Names, icons and values come from the player's game files. Backed up and staged; an edited save earns no trophies and plays offline only. A save with an added gem was loaded and written back by the game ([launcher docs](https://github.com/bloodborne-native/bloodborne-launcher/blob/main/docs/SAVE_MANAGER.md)) |
+| Launcher | Blue-slate and gold, a calm Home, a grouped menu with Saves and Trophies tabs, a fixed window size; the in-game menus use the same colours. Platform-neutral: system differences in `platform.rs` (macOS, Linux, Windows; CI on all three), texts that never name a system, a layout from phone width up |
+| CPU | The translator translates the instructions it used to interpret most, and calls the guarded command-buffer functions without the dispatcher (bloodborne-recomp #15 and #16, FraSharp: 67.9 to 71.9 FPS in the Hunter's Dream on an M1 Max, same CPU time) |
 | Docs | One English set per repository; wikis mirror them |
 
 ## Open threads
@@ -38,10 +41,9 @@ Imported bbport compatibility: 0.51, plus parts of 0.6 (below).
 setting re-enabling shadows in a secondary context without a shadow target. A separate null guest
 virtual call seen once on Metal has not recurred. A
 [GXRenderThread null read in Cathedral Ward](https://github.com/bloodborne-native/bloodborne-mac/issues/3)
-has a different signature and is not confirmed fixed; a nearby save is needed to reproduce it.
-The [FSR 3.1 dark picture on an M5](https://github.com/bloodborne-native/bloodborne-mac/issues/2)
-is also unconfirmed: the reported resolution and upscaler settings rendered normally on this M3
-Pro in both 0.8.0 and current main. The reporter's check on 0.8.2 is needed.
+could not be reproduced and was closed until it happens again; so was a
+[crash on death in Central Yharnam](https://github.com/bloodborne-native/bloodborne-mac/issues/5)
+(a depth buffer viewed as colour on Metal) after its reporter did not answer.
 Check the frame-rate hooks in play (running above 90 FPS, cloth, Laurence's cinematic; needs a
 save near it).
 
@@ -69,15 +71,24 @@ through [Wooloomooloo2/bloodborne_mac_port](https://github.com/Wooloomooloo2/blo
 the translator: 344% of one core against 402% at the 1st Floor Sickroom lamp, 357% against 392%
 at the test save's place in Cathedral Ward (bloodborne-recomp #9–#12, 2026-10-25), at the same
 frame rate. R3's follow-ups (plain accesses to a function's own frame, the calls still going into
-the translator, a 0.5 FPS gap at the Sickroom) are in bloodborne-recomp's docs. The launcher does
-not offer the library yet (a "CPU: Translator / Recompiled" option is a candidate).
+the translator, a 0.5 FPS gap at the Sickroom) are in bloodborne-recomp's docs.
+
+**The recompiled library from the launcher (in progress).** A library built with only LLVM
+23.1.4's official download (clang and `ld64.lld`, no Xcode or macOS SDK, `-nostdinc` with four
+stand-in headers) ran the game: 240,978 of 241,031 functions replaced, no faults. It leaves only
+`memcpy`, `memset` and 128-bit division helpers to the game process. `-ffreestanding` must not be
+used: it turns built-ins off, the code grows 32% and frames took 42.4 ms against 26.3 with the
+usual library. Compiling takes about 2 s a file with 8 jobs on an M3 Pro (384 files); linking 2 s.
+The official download is 1.5 GB, of which the build needs 342 MB. Plan:
+[roadmap](ROADMAP.md#8-after-090-final).
 
 **Watch list.** A short white flash in the opening video and an enemy's body drawn as colour
 noise have not recurred in recent play. Neither has a confirmed fix. Older rare assertions are in
 the runtime's [stability notes](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/STABILITY.md).
 
-**Online.** bbport 0.6's module (Seamless Hunt with BBSC co-op, The Hunter's Dream) needs its
-dependencies in `deps/`, its hooks on our base, and the maintainer's decision on edited saves.
+**Online.** The module ships (libbbnet20, shadPS4 0.20's network code; The Hunter's Dream part
+makes it GPL-3.0-or-later). It was tested here without an account; players test both pools with
+the 0.9.0 release candidate. Seamless co-op (BBSC) is not supported.
 
 ## Keep in step
 
@@ -85,6 +96,8 @@ dependencies in `deps/`, its hooks on our base, and the maintainer's decision on
   in-game menu (`MemoryEstimate` in `bbport_overlay.cpp`) estimate it the same way.
 - Settings the menu shows: the runtime's `bbport_settings.cpp` and the launcher's
   `settings_store.rs` (`GAME_SYNCED`).
+- Colours: the launcher's `src/index.css` tokens and the overlay's `Theme` in `bbport_overlay.cpp`
+  (the settings menu, keyboard, FPS counter, banners and trophy notices).
 - Versions: the app and the launcher, and the tag of a release. `bash packaging/version.sh X.Y.Z`
   writes the number everywhere and `--check` compares the files (and the tag, in the workflow).
 

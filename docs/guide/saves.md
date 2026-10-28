@@ -13,43 +13,66 @@ Play is available once the profile is created.
 
 ## Profiles
 
-- **New profile** (top of the Profiles tab): a new profile starts with no saves.
-- **Use profile**, or the profile above Play (its name and trophies: click it), chooses which one
-  Play uses. Its menu also opens the profile's saves and trophies.
-- Renaming a profile changes only its name.
+**Profiles** (in the menu) lists them; the active one is marked.
+
+- **New profile** starts with no saves.
+- **Use profile**, or the profile above Play (click its name), chooses which one Play uses.
+- **Rename** changes only its name.
 - **Delete** removes an inactive profile with its saves and backups, after a confirmation. The
   active profile and the last one cannot be deleted.
 
-Click a profile's name to open its **Saves · Backups** and **Trophies**; opening a profile does
-not make it the active one.
-
 ## Saves and backups
 
-Saves · Backups shows the save's size and date, and its backups.
+**Saves** (in the menu) shows the active profile's characters first, then its current save and
+its backups.
 
-- A backup is made automatically **before every launch**. **Back up** makes another.
+- Each readable character shows its name, level, attributes, Blood Echoes, Insight, playtime and
+  journey, with **Edit character** (see below).
+- A backup is made automatically **before every launch**. **Create backup** makes another.
+  Backups of a save edited by the launcher are marked **Edited**, the others **Original**.
 - **Restore** (then confirm) replaces the save with a backup; the current save is backed up first.
-- **Show the folder** opens the save or backup folder. Backups are kept until you delete them.
+- The folder button opens the save or backup folder. Backups are kept until you delete them.
 
-The Saves page also previews each readable character's name, level, attributes, Blood Echoes,
-Insight, playtime and journey. **Edit character** changes Vitality (7–99), Endurance (8–99)
-and the other four attributes (1–99),
-Blood Echoes (up to 999,999,999) and Insight (up to 99). **Max all** sets them to their maxima,
-reaching level 544. Level follows the attributes; changing Vitality or Endurance also sets
-the saved health or stamina to its full base value. Runes and equipment may alter the value
-shown in game. The game must be stopped. Confirming an edit first backs up
-the complete current save set, then marks the edited save as ineligible for new trophies. To
-continue from a clean save, restore a backup from before the first edit.
+## Editing a character
+
+**Edit character** opens the save editor, with a tab for each part. The game must be stopped,
+and the editor reads names, icons and values from your game files: select the game folder on
+Home first. Nothing changes until **Save changes**; **Discard changes** drops them.
+
+- **Character:** Vitality (7–99), Endurance (8–99) and the other four attributes (1–99), Blood
+  Echoes (up to 999,999,999) and Insight (up to 99). **Max all** sets them to their maxima,
+  reaching level 544. Level follows the attributes; changing Vitality or Endurance also sets the
+  saved health or stamina to its full base value. Runes and equipment may change the values
+  shown in game.
+- **Items** and **Storage:** amounts, up to what the game allows, and **Add item**.
+- **Weapons:** a weapon's level and imprint (Uncanny, Lost), with its stats before and after and
+  how the imprints compare, and its gem slots. Slots follow the level as in the game (most
+  weapons open them at +1, +3 and +6, their shapes depending on the imprint); a gem that no
+  longer fits is taken out. **Add weapon** adds one at +0.
+- **Armor:** **Add armor**.
+- **Gems:** each gem's weapon slot (put in, moved or taken out) and the strength of its effects.
+  **Add gem** adds one: choose its effect and its shape (radial, triangle, waning, circle or
+  droplet).
+
+The Add buttons open a list of what the game has, with a search; what you add waits in the list
+until you save. Adding weapons, armor and gems isn't available yet for the few saves that keep
+two copies of the character: saving says so and changes nothing.
+
+Saving first backs up the complete current save set, then marks the save as edited. **An edited
+save can't earn new trophies and plays offline only.** To continue from a clean save, restore a
+backup from before the first edit.
 
 ## Trophies
 
-Trophies you earn are recorded on your Mac for the active profile (nothing is sent to PSN). The
-Trophies page lists all 40, Bloodborne and The Old Hunters separately, with grades, short
-requirements and the date you earned each. Platinum comes after the other 33 base-game trophies.
-Trophies earned before this tracking existed are not imported from a save.
+Trophies you earn are recorded on this device for the active profile (nothing is sent to PSN).
+**Trophies** (in the menu) lists all 40, Bloodborne and The Old Hunters separately, with grades,
+short requirements and the date you earned each. Show all, unlocked or locked ones, and sort them
+by game order, recently earned, locked first, or grade. Platinum comes after the other 33
+base-game trophies. Trophies earned before this tracking existed are not imported from a save.
 
-**Edited saves cannot earn trophies.** A save marked as edited shows a warning; trophies earned
-before stay. Restoring a backup from before the edit restores eligibility.
+While the active save is edited, the trophy next to the profile's name is slashed (its tooltip
+says why), the Trophies page says new trophies are disabled, and none are recorded; trophies earned before stay. Restoring a backup from before the edit
+restores them.
 
 ## Where it is stored
 

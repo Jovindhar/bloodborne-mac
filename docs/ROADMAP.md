@@ -22,7 +22,11 @@ wiki, the commit message, a code comment) and recorded in the runtime's
   check and edited-save trophy marker (launcher `6f6f64a`).
 - [x] Add Vitality and Endurance with coherent saved HP and stamina values, and a level 544
   Max all action (launcher `1697795`; see `launcher/docs/SAVE_MANAGER.md`).
-- [ ] Verify other character fields and inventory one at a time.
+- [x] The inventory, verified one part at a time: item amounts and adding items (launcher
+  `300a1fb`), gems and runes with their effects (`1257d68`), gems into weapon slots (`a9406c1`),
+  weapon levels and imprints, adding weapons and armor (`c0908e9`), gem slots following the
+  level and adding gems (`57e8b9e`; a save with an added gem loaded and written back by the
+  game), gem icons (`1d77932`).
 - [ ] Import/export complete save sets and manage backup history.
 
 ## 1. Small fixes (runtime)
@@ -243,10 +247,14 @@ Decided 2026-10-27, in this order.
   - The compiler: the launcher downloads a trimmed LLVM toolchain (clang, `ld64.lld`, clang's
     headers; from an official LLVM release, Apache-2.0 with LLVM exception), hosted as a release
     asset and checked against a SHA-256 pinned in the launcher, and deletes it after the build.
-    The library is built freestanding (`-ffreestanding -fno-stack-protector`, `-undefined
-    dynamic_lookup`): it needs no macOS SDK, since its few unresolved helpers come from the game
-    process. First step: a prototype build with only that toolchain, run in the game, to measure
-    the download and build time.
+    The library is built without an SDK (`-nostdinc` with clang's headers and four stand-in
+    headers, `-fno-stack-protector`, linked by `ld64.lld` with `-nostdlib -undefined
+    dynamic_lookup`): its few unresolved helpers (`memcpy`, `memset`, 128-bit division) come from
+    the game process. Not `-ffreestanding`: it turns built-ins off, the code grows 32% and frames
+    were 60% slower.
+  - [x] Prototype (2026-10-28): LLVM 23.1.4's official download (1.5 GB; the build needs 342 MB of
+    it) built a library the game ran with 240,978 of 241,031 functions replaced and no faults;
+    about 2 s a file with 8 jobs on an M3 Pro, 2 s to link.
   - The library and generated C stay in the player's data folder and are never uploaded (they
     are game code). The launcher records the recompiler version and the executable's hash; a
     stale or missing library falls back to Translated with the reason shown.
