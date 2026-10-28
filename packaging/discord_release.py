@@ -65,7 +65,7 @@ def message(tag, notes):
     fields = [
         {'name': 'Download', 'value': f'[{dmg}](https://github.com/{REPO}/releases/download/{tag}/{dmg})',
          'inline': False},
-        {'name': 'Requirements', 'value': 'A Mac with Apple Silicon (M1 or newer), macOS 13 or newer. '
+        {'name': 'Requirements', 'value': 'A Mac with Apple Silicon (M1 or newer), macOS 15 or newer. '
          'Your own Bloodborne dump with update 1.09.', 'inline': False},
     ]
     known = unwrap(section(text, 'Known issues'))
