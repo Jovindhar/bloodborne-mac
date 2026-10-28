@@ -262,8 +262,8 @@ Decided 2026-10-27, in this order.
   - The library and generated C stay in the player's data folder and are never uploaded (they
     are game code). The launcher records the recompiler version and the executable's hash; a
     stale or missing library falls back to Translated with the reason shown.
-- [ ] **R4 for the render boundary, then N6.** 54% `██████████░░░░░░░░░░` of its steps (recomp's
-  RECOMPILATION.md, "Annotations": R4.1 done, R4.2 83%, R4.3 87%, R4.4 and R4.5 not started). Names, objects and call sites for the engine's
+- [ ] **R4 for the render boundary, then N6.** 56% `███████████░░░░░░░░░` of its steps (recomp's
+  RECOMPILATION.md, "Annotations": R4.1 and R4.3 done, R4.2 83%, R4.4 and R4.5 not started). Names, objects and call sites for the engine's
   render functions first (not every function), so the native renderer can take the engine's
   draws instead of decoding PS4 command buffers: what limits the frame rate on the Mac.
   Synchronization primitives next, signatures for the hottest functions after. Started before
@@ -278,7 +278,7 @@ Decided 2026-10-27, in this order.
     draws through the seven methods, 7% compute passes, 2% render-target passes, 6% Scaleform.
     The shader resources step is known (per stage: samplers, textures, constant buffers into the
     binder's tables). Left: the compute passes.
-  - [ ] R4.3, their objects: the draw context, meshes and materials as structs. Done so far
+  - [x] R4.3, their objects: the draw context, meshes and materials as structs. Done so far
     (recomp `annotations/structs.h`): the draw state each draw method takes (Direct3D 11's model:
     input layout, 32 vertex buffers, index buffer, rasterizer, viewports, scissors, blend,
     depth-stencil, render targets, five shader stages with their samplers, textures and constant
@@ -290,8 +290,8 @@ Decided 2026-10-27, in this order.
     calls at the 16 busiest call sites. The context's state setters (topology, vertex and index
     buffers, the five shaders) are named, and the materials' textures (into the pixel stage, and
     the domain stage for tessellation) and constants (parameter objects writing the material's
-    constant buffer). 139 functions in all. Left: the upload-ring draw's callers, the compute
-    passes.
+    constant buffer). The upload-ring draw serves eight renderers that write their vertices each
+    frame (most likely the visual effects). 148 functions in all.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
