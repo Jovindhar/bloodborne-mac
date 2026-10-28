@@ -27,8 +27,9 @@ In this order (maintainer, 2026-10-27; R4 was done first, on 2026-10-28):
    CoreGraphics2's seven draw methods (85% of libGnm's draws), with their draw state, instead of
    decoding PS4 command buffers. R4 named and described what it needs
    ([recomp's annotations](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md#annotations)).
-   It starts with a written plan in the runtime's
-   [NATIVE_RENDERER.md](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md).
+   Under way on the runtime's `n6` branch (2 of 6 steps: the plan, the draws observed); its
+   steps are in that branch's
+   [NATIVE_RENDERER.md](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary).
 2. **The generator's CPU work** (recomp): flags only where they are read; a function's own stack
    frame as host locals when its address never escapes; memory ordering kept only around the
    engine's synchronization, which R4.4 named. These matter most on CPUs weaker than the Mac's.

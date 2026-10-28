@@ -14,7 +14,9 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 - **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
   renderer ([performance](guide/performance.md)).
 - **Now:** deciding 0.9.0 final; accepting the native Metal renderer (N5).
-- **Next:** N6 (the native renderer takes the engine's draws), then the recompiler's CPU work.
+- **Under way:** N6, the native renderer taking the engine's draws, on the runtime's `n6`
+  branch: the plan written and the draws observed (2 of 6 steps).
+- **Next:** the recompiler's CPU work.
 
 ## Milestones
 
@@ -32,7 +34,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 | N0 · scope, N1 · frame planning | 100% `████████████████████` | Deferred clears |
 | N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
 | N5 · Metal backend | 95% `███████████████████░` | The default since 0.9.0 RC 1; the maintainer's play sessions passed; acceptance waits for players' reports on the release candidates and M1/M2 comparisons |
-| N6 · the engine's render boundary | 0% `░░░░░░░░░░░░░░░░░░░░` | Next; R4 found the boundary |
+| N6 · the engine's render boundary | 33% `██████░░░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written; 99.96% of the engine's draws matched to their packets, their state agreeing with the decoded registers ([plan](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). Next: resources and outputs compared |
 | N2 · shaders ahead of time, N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N6 |
 | **Platforms** | | |
 | macOS (Apple Silicon) | | Released |
