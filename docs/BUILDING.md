@@ -65,7 +65,9 @@ moved or deleted. Merged branches are deleted.
   app, so focus and Cmd+Q behave unlike a launcher game; `BB_BENCH_FOREGROUND=1` for a test the
   maintainer plays in.
 - The runtime's macOS CI runs on every push and cancels older runs: wait for a run whose result
-  matters before pushing again. Its Linux CI is started by hand.
+  matters before pushing again. With its caches warm (the built dependencies and ccache, 99.7% of
+  compiles from the cache) a run takes about 14 minutes instead of 36; most of what remains is the
+  GPU library's link-time optimization and the tests. Its Linux CI is started by hand.
 - Five GPU tests (motion-shader, scene-resolution, taa-shader, camera-motion, translation-memory)
   no longer compile and are listed in `runtime/gpu/CMakeLists.txt` instead of run.
 
