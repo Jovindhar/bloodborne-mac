@@ -81,35 +81,23 @@ The [installation guide](docs/guide/installation.md) has the details.
 
 ## Status
 
-**Experimental, playable.** The game boots, loads saves and plays with sound, controllers and
-saving. On an Apple M3 Pro at native 1080p it runs at about **40 FPS** in play with the Metal
-renderer (median 42 over a 3-hour new game), and about 31 FPS with MoltenVK in the same place
-([performance](docs/guide/performance.md)). Only one machine has been tested so far: results on
-other Macs are welcome.
+**Experimental, playable.** The latest release is **0.8.3**; **0.9.0 RC 2** is out as a
+pre-release, with online play, the save editor and the native Metal renderer by default. On an
+Apple M3 Pro at native 1080p the game runs at about **40 FPS** in play with the Metal renderer
+(median 42 over a 3-hour new game; [performance](docs/guide/performance.md)). Only one Mac has
+been measured so far: results on other Macs are welcome.
 
-On main, Metal starts without loading Vulkan or MoltenVK. MoltenVK remains a selectable fallback
-until M4 passes checks on M1 and M2 Macs and a release-candidate play session.
+| | Progress | |
+|---|---|---|
+| CPU: recompiling the game's code (R0–R4) | `████████████████████` 100% | Every function runs recompiled; the engine's render code is named |
+| Graphics: the native renderer (N0–N6) | `███████████░░░░░░░░░` 56% | Native Metal by default; next, taking the engine's draws directly (N6) |
 
-**New in 0.8.2:** clothing lighting at high render resolutions no longer disappears after texture
-collection. The fix was checked at native 1440p on Metal and MoltenVK.
-[0.8.2 release notes](docs/releases/v0.8.2.md).
+**Next:** 0.9.0 final; then N6, the native renderer taking the engine's draws, and the
+recompiler's CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
 
-**From 0.8.1:** the repeatable GX worker crash with live dynamic shadows is fixed on Metal and
-MoltenVK; a rejected tessellation pipeline no longer makes the shader cache rebuild every launch;
-and **MetalFX (Apple)** is an optional macOS upscaler. The big FPS overlay shows MetalFX and its
-render resolution. [0.8.1 release notes](docs/releases/v0.8.1.md).
-
-**From 0.8.0:** character motion vectors no longer crash the game; the launcher and the
-in-game menu share every setting, and the menu has the launcher's look, tabs and an on-screen
-keyboard; outputs above 1080p start again; an experimental **Metal renderer** (Advanced →
-Renderer) draws the game with Apple's Metal directly, usually faster; from bbport 0.6, a frame
-rate that keeps physics right at any speed, effects that switch without a restart, aspect ratios
-(16:10, 21:9, ...) and keyboard and mouse in Dark Souls III's layout. See
-[Release notes](docs/releases/v0.8.0.md).
-
-**Known issues:** blood on already killed enemies can look pale after a save reload.
-See [Troubleshooting](docs/guide/troubleshooting.md#known-issues) for details and other things to
-know before playing.
+**Known issues:** blood on already killed enemies can look pale after a save reload; the camera
+after a cutscene sometimes starts in front of your character. See
+[Troubleshooting](docs/guide/troubleshooting.md#known-issues).
 
 ## Documentation
 
@@ -136,8 +124,8 @@ The app is built from four repositories:
 
 **The recompiler** turns the game's code, from the player's own copy, into native code ahead of
 time, checked against calls recorded from the original. Every one of the game's functions is
-generated and the game runs on them; the work now is making that faster than the translator.
-Only the tool is published, never the game's code
+generated and the game runs on them, with less CPU time than the translator; the launcher builds
+the library on the player's Mac. Only the tool is published, never the game's code
 ([status](https://github.com/bloodborne-native/bloodborne-recomp/wiki/Recompilation-status)). The
 recompiler and its CPU layer don't depend on macOS: other platforms can build on them.
 

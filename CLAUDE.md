@@ -8,7 +8,8 @@ with the CPU layer and recompiler in `runtime/recomp/` (bloodborne-recomp); the 
 ## Read first
 
 - `docs/STATUS.md`: what main has, what is open, where to continue.
-- `docs/ROADMAP.md`: the plan as a checklist; tick items (with where they landed) as work lands.
+- `docs/ROADMAP.md`: the plan (Now, Next, Later, Not taken, Done); an item moves to Done, with
+  where it landed, when the work lands.
 - `docs/ARCHITECTURE.md`, `docs/BUILDING.md` (build, working across submodules, releasing).
 - Each submodule's CLAUDE.md and docs for its own work.
 
@@ -16,6 +17,7 @@ with the CPU layer and recompiler in `runtime/recomp/` (bloodborne-recomp); the 
 
 - `launcher/`, `runtime/`: submodules (see above).
 - `packaging/macos.sh`: `Bloodborne.app` and its DMG in `dist/`, from `runtime/`'s build.
+- `tools/wikigen.py`: every repository's wiki generated from its docs (`docs/BUILDING.md`).
 - `.github/workflows/macos.yml`: a `v*` tag builds and publishes a release; manual runs build a
   test package.
 - `docs/guide/`: player guides (the only copy; the launcher's docs are for developers).
@@ -50,7 +52,8 @@ come from the game (`runtime/tools/grab.sh`), in English, never from the user's 
   `runtime/recomp/out/recomp/eboot_ghidra.elf`; its MCP entry in `~/.claude.json` sets a 6 GB
   heap and a longer startup deadline; recomp's CLAUDE.md has the details). Its output is game
   code: use it to understand, never commit it or paste it into docs, issues or wikis.
-- An Apple M3 Pro (18 GB): a healthy run in the Hunter's Dream is ~58–68 FPS.
+- An Apple M3 Pro (18 GB): a healthy run with the defaults (Metal renderer, native 1080p, no
+  upscaler) reads 38.2–39.6 FPS standing in Cathedral Ward (the runtime's `docs/BUILDING.md`).
 - The old `PabloVSouza/bloodborne_mac` repository only points to the four repositories.
 
 ## Working rules (all four repositories)

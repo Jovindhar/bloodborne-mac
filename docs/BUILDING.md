@@ -45,6 +45,46 @@ through a pull request with one approval and the CI checks passed (runtime: `bui
 maintainer pushes to `main` directly. Release tags (`v*` here, `toolchain-*` in recomp) cannot be
 moved or deleted. Merged branches are deleted.
 
+## Things that change together
+
+- **Memory:** `run.sh` sizes the game's memory; the launcher (`src/lib/data/memory.ts`) and the
+  in-game menu (`MemoryEstimate` in `bbport_overlay.cpp`) estimate it the same way.
+- **Settings the menu shows:** the runtime's `bbport_settings.cpp` and the launcher's
+  `settings_store.rs` (`GAME_SYNCED`).
+- **Colours:** the launcher's `src/index.css` tokens and the overlay's `Theme` in
+  `bbport_overlay.cpp` (the settings menu, keyboard, FPS counter, banners and trophy notices).
+- **Versions:** the app and the launcher, and a release's tag (`packaging/version.sh`, below).
+
+## Tests
+
+- `bash runtime/build.sh --test` runs the runtime's tests through `ctest`; the launcher's checks
+  are in its README; bloodborne-recomp's CI runs its CPU tests on Apple Silicon.
+- Game tests copy the player's save (`runtime/tools/test_run.sh`, the runtime's
+  [building guide](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/BUILDING.md)).
+  Test games are background-only apps (`SDL_MAC_BACKGROUND_APP=1`): they never become the active
+  app, so focus and Cmd+Q behave unlike a launcher game; `BB_BENCH_FOREGROUND=1` for a test the
+  maintainer plays in.
+- The runtime's macOS CI runs on every push and cancels older runs: wait for a run whose result
+  matters before pushing again. Its Linux CI is started by hand.
+- Five GPU tests (motion-shader, scene-resolution, taa-shader, camera-motion, translation-memory)
+  no longer compile and are listed in `runtime/gpu/CMakeLists.txt` instead of run.
+
+## Docs and wikis
+
+Each repository's wiki is generated from its docs, whole: one page per doc, Home from
+`docs/README.md`, the sidebar, the app's release notes, and bloodborne-recomp's status page from
+its RECOMPILATION.md. After changing docs, regenerate and push the wiki (never edit a page by
+hand):
+
+```bash
+git clone https://github.com/bloodborne-native/bloodborne-recomp.wiki.git /tmp/recomp-wiki
+python3 tools/wikigen.py recomp runtime/recomp /tmp/recomp-wiki   # app, runtime, recomp or launcher
+```
+
+Docs say what is true now: status, progress (20-block bars, one per 5%) and next steps in each
+repository's status doc, conclusions instead of logs. Status and the plan for the whole project
+are this repository's [Status](STATUS.md) and [Roadmap](ROADMAP.md).
+
 ## Releasing
 
 App versions are this project's own; bbport's version only records imported compatibility. The

@@ -74,16 +74,19 @@ and [profiles and saves](https://github.com/bloodborne-native/bloodborne-launche
 
 ## Where it is going: native code
 
-Translating the game's code works but costs CPU time, and every frame still goes through the
-PS4's command format and MoltenVK. Two milestones replace that:
+The game's code is translated while it runs, and every frame is the PS4's command buffers
+decoded into Metal calls. Two milestones replace both with native code; where each stands is in
+[Status](STATUS.md#milestones):
 
 - **The recompiler** turns the game's functions, from the player's own executable, into C
   compiled into a native library, checked against calls recorded from the original. Every
-  function is generated and the game runs on them, with less CPU time than the translator;
-  building it from the launcher is next ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)).
-- **The native renderer** draws on Metal directly on macOS without loading Vulkan or MoltenVK;
-  the shared renderer still uses Vulkan types internally. The MoltenVK fallback remains selectable
-  until M4 acceptance. Linux keeps its Vulkan backend
-  ([Render adapter](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/RENDER_ADAPTER.md)).
+  function runs recompiled, with less CPU time than the translator, and the launcher builds the
+  library on the player's Mac. R4 named the engine's render code, its synchronization and its
+  busiest functions, which the next steps use
+  ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)).
+- **The native renderer** draws with Metal directly on macOS, without Vulkan or MoltenVK (the
+  MoltenVK fallback stays selectable until N5 is accepted; Linux keeps its Vulkan backend). Next,
+  N6 takes the engine's draws at its own render boundary instead of decoding PS4 command buffers
+  ([Native renderer](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md)).
 
 Only the tools are published, never the game's code.
