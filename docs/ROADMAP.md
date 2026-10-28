@@ -262,8 +262,8 @@ Decided 2026-10-27, in this order.
   - The library and generated C stay in the player's data folder and are never uploaded (they
     are game code). The launcher records the recompiler version and the executable's hash; a
     stale or missing library falls back to Translated with the reason shown.
-- [ ] **R4 for the render boundary, then N6.** 80% `████████████████░░░░` of its steps (recomp's
-  RECOMPILATION.md, "Annotations": R4.1 to R4.4 done, R4.5 not started). Names, objects and call sites for the engine's
+- [ ] **R4 for the render boundary, then N6.** 98% `███████████████████░` of its steps (recomp's
+  RECOMPILATION.md, "Annotations": R4.1 to R4.4 done, R4.5 18 of 20). Names, objects and call sites for the engine's
   render functions first (not every function), so the native renderer can take the engine's
   draws instead of decoding PS4 command buffers: what limits the frame rate on the Mac.
   Synchronization primitives next, signatures for the hottest functions after. Started before
@@ -297,7 +297,10 @@ Decided 2026-10-27, in this order.
     condition signals and the middleware's locks named (from their source files) and counted in the
     game (the light mutex about 158,700 times a second); the 12,734 atomic instructions inventoried
     by library. 184 functions in all.
-  - [ ] R4.5, the hottest functions' signatures.
+  - [ ] R4.5, the hottest functions' signatures: the 20 busiest functions of the CPU profile named
+    with their signatures, 18 done (the job loop, Lua's interpreter, the world update, skeleton and
+    skinning, culling, the resource commit and more); left: a Havok function and one not labelled.
+    202 functions in all.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
   engine's synchronization (from R4's names). These matter most on CPUs weaker than the Mac's.
