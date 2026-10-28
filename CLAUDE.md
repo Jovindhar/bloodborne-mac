@@ -46,8 +46,10 @@ come from the game (`runtime/tools/grab.sh`), in English, never from the user's 
 - Metal System Traces need `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`.
 - **REA** (https://github.com/morluto/rea) is an MCP server here with the Ghidra provider
   (Ghidra 12.1.4, Java 21; `JAVA_HOME` and `GHIDRA_INSTALL_DIR` in `~/.zshrc`): decompiling,
-  cross-references and call graphs of `runtime/recomp/out/eboot.elf`. Its output is game code:
-  use it to understand, never commit it or paste it into docs, issues or wikis.
+  cross-references and call graphs of the game's executable (open
+  `runtime/recomp/out/recomp/eboot_ghidra.elf`; its MCP entry in `~/.claude.json` sets a 6 GB
+  heap and a longer startup deadline; recomp's CLAUDE.md has the details). Its output is game
+  code: use it to understand, never commit it or paste it into docs, issues or wikis.
 - An Apple M3 Pro (18 GB): a healthy run in the Hunter's Dream is ~58–68 FPS.
 - The old `PabloVSouza/bloodborne_mac` repository only points to the four repositories.
 
