@@ -85,8 +85,11 @@ def main():
     out['Home'] = convert(repo, pages, 'docs/README.md', (checkout / 'docs/README.md').read_text())
     out['Home'] = re.sub(r'^# .*', f'# {repo}', out['Home'], count=1)
     if key == 'app':
-        rel = sorted((checkout / 'docs/releases').glob('v*.md'), reverse=True,
-                     key=lambda p: [int(x) if x.isdigit() else x for x in re.split(r'[.-]', p.stem[1:])])
+        def order(p):  # newest first; a final release before its candidates (0.9.0, then 0.9.0-rc.2)
+            version, _, candidate = p.stem[1:].partition('-')
+            numbers = [int(x) for x in version.split('.')]
+            return numbers, not candidate, [int(x) if x.isdigit() else x for x in candidate.split('.')]
+        rel = sorted((checkout / 'docs/releases').glob('v*.md'), reverse=True, key=order)
         names = []
         for p in rel:
             page = 'Release-' + p.stem[1:]
