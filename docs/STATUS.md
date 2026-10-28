@@ -68,6 +68,10 @@ What main has beyond 0.9.0 RC 2:
   ([player guide](guide/performance.md#recompiled-code)).
 - **A faster translator** (bloodborne-recomp #17) and the runtime's own math and wide-string
   calls (bloodborne-runtime #7): 3.6% less CPU per frame with the translator.
+- **The game's threads at macOS's user-interactive QoS** (bloodborne-runtime #8): kept on
+  performance cores; +2 FPS where the CPU sets the frame rate (an M1 Max in Yahar'gul), no change
+  on the GPU-bound M3 Pro. A translator fix for one float-to-integer conversion (bloodborne-recomp
+  #18).
 
 ## Areas
 

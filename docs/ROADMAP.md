@@ -123,8 +123,8 @@ Where each landed; the release notes say what changed for players.
   `aa47a95`, runtime `8d2d469`, launcher `adec5ac`).
 - R4: the engine's render code, synchronization and 20 busiest functions named and described
   (recomp `annotations/`, 2026-10-28).
-- A faster translator (recomp #15, #16, #17) and the runtime's own math and wide-string calls
-  (runtime #7).
+- A faster translator (recomp #15, #16, #17, #18) and the runtime's own math and wide-string
+  calls (runtime #7); the game's threads at user-interactive QoS (runtime #8).
 
 **Graphics** (bloodborne-runtime):
 
