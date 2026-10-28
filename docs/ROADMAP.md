@@ -262,7 +262,8 @@ Decided 2026-10-27, in this order.
   - The library and generated C stay in the player's data folder and are never uploaded (they
     are game code). The launcher records the recompiler version and the executable's hash; a
     stale or missing library falls back to Translated with the reason shown.
-- [ ] **R4 for the render boundary, then N6.** Names, objects and call sites for the engine's
+- [ ] **R4 for the render boundary, then N6.** 51% `██████████░░░░░░░░░░` of its steps (recomp's
+  RECOMPILATION.md, "Annotations": R4.1 done, R4.2 83%, R4.3 75%, R4.4 and R4.5 not started). Names, objects and call sites for the engine's
   render functions first (not every function), so the native renderer can take the engine's
   draws instead of decoding PS4 command buffers: what limits the frame rate on the Mac.
   Synchronization primitives next, signatures for the hottest functions after. Started before
