@@ -145,7 +145,8 @@ ratios; keyboard and mouse with a menu pointer; button prompts for the device in
 **Release candidates learn of newer releases** (launcher `9466d2d`): a candidate build carries its
 tag and checks candidates too, so it is told about the next candidate and the final release.
 
-**Releases:** 0.9.0 (2026-10-28): the release candidates' changes, the recompiled code page, a
+**Releases:** 0.9.1 (2026-10-28): the shader cache fix for black walls after long play (app issue
+#7). 0.9.0 (2026-10-28): the release candidates' changes, the recompiled code page, a
 faster translator, game threads on the performance cores, the on-screen keyboard fix.
 
 **Launcher:** profiles and saves; trophies, with notices drawn by the game; settings shared with

@@ -10,11 +10,12 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 
 ## At a glance
 
-- **Released:** 0.9.0, on 2026-10-28: the native Metal renderer, online play, the save editor and
-  the recompiled code page ([notes](releases/v0.9.0.md)).
+- **Released:** 0.9.1, on 2026-10-28: the shader cache no longer turns walls black after long play
+  ([notes](releases/v0.9.1.md)); 0.9.0, the same day, brought the native Metal renderer, online
+  play, the save editor and the recompiled code page ([notes](releases/v0.9.0.md)).
 - **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
   renderer ([performance](guide/performance.md)).
-- **Now:** accepting the native Metal renderer (N5), with players' reports on 0.9.0.
+- **Now:** accepting the native Metal renderer (N5), with players' reports on 0.9.x.
 - **Under way** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its
   render boundary; mesh draws bind their resources from its draw state); N2, shaders built to
   read the draw state instead of the PS4 user data, has its plan and inventory (40%).
@@ -48,6 +49,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 
 | Version | Highlights |
 |---|---|
+| 0.9.1 | The shader cache no longer reuses a shader's slot, which drew walls and scenery black after long play; caches are rebuilt once; the draw-preparation threads about 10% less busy |
 | 0.9.0 | The release candidates' changes; the recompiled code page (the library built on the player's Mac); a faster translator; the game's threads on the performance cores; the on-screen keyboard no longer reopens after a name is typed |
 | 0.9.0 RC 2 | Online play; the save editor; the launcher's new look with Saves and Trophies tabs; in-game menus in its colours; a faster translator; macOS 15 |
 | 0.9.0 RC 1 | The native Metal renderer by default (MoltenVK as the fallback); MetalFX on the native frame; button prompts for the device in use; keyboard and mouse in the in-game menu |
@@ -63,14 +65,14 @@ hand.
 
 ## On main
 
-What main has beyond 0.9.0:
+Main is 0.9.1, plus:
 
 - **R4** (bloodborne-recomp's `annotations/`): the engine's render boundary, the draw state,
   models, meshes, materials, shader programs, the synchronization primitives and the 20 busiest
   functions, named and described for N6 and the generator. `BB_DRAW_CENSUS=1` (runtime) counts the
   game's draws and locks at that boundary.
 - **CI caches:** the app's and the runtime's workflows keep the built dependencies and a compiler
-  cache between runs.
+  cache between runs: a release build takes about 25 minutes instead of 60.
 
 ## Areas
 

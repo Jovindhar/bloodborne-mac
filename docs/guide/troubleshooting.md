@@ -46,6 +46,7 @@ Please do not report problems with this port to shadPS4 or to bbport.
 
 | Problem | Fixed in |
 |---|---|
+| Walls and scenery black on every start after a long session, until the shader cache was deleted | 0.9.1 |
 | Closing the on-screen keyboard after typing a name opened it again at once, several times in a row | 0.9.0 |
 | Opening the game's status page in the Lecture Building, or quitting, could stop the game with the Metal renderer | 0.9.0 RC 2 |
 | The Mods and Patches pages kept loading and found no mods or patches | 0.8.3 |
