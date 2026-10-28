@@ -12,8 +12,6 @@ commit message, a code comment; the runtime's `docs/UPSTREAM.md` records them).
 
 ## Now
 
-- **0.9.0 final.** Release candidate 2 is out (pre-release); the maintainer decides when final
-  ships (steps in [Building and releasing](BUILDING.md#releasing)).
 - **N5 acceptance (native Metal renderer).** Implemented and the default since 0.9.0 RC 1; the
   maintainer's play sessions passed (2026-10-26). Accepting it waits for players' reports on the
   release candidates and the capability comparisons on M1 and M2 Macs (`BB_METAL_CAPS=compare`).
@@ -69,8 +67,8 @@ In this order (maintainer, 2026-10-27; R4 was done first, on 2026-10-28):
 
 - Release-candidate builds are not told about newer candidates or the final release: the update
   check ignores pre-releases and compares the app's version, which is `0.9.0` in every 0.9.0
-  candidate (the launcher's `docs/UPDATES.md`). Players on 0.9.0 RC 1 or RC 2 will not see a
-  notice for 0.9.0 final.
+  candidate (the launcher's `docs/UPDATES.md`). Players on 0.9.0 RC 1 or RC 2 were not told
+  about 0.9.0 (the release notes and the Discord post said so); fix it before the next candidates.
 - Import and export complete save sets; manage the backup history.
 
 **Graphics:**
@@ -147,6 +145,9 @@ Where each landed; the release notes say what changed for players.
 through hooks (F3 for 30 FPS); Laurence's cinematic above 30 FPS; effects switched live; aspect
 ratios; keyboard and mouse with a menu pointer; button prompts for the device in use; online
 (Seamless Hunt and The Hunter's Dream, runtime `49e2d2c`).
+
+**Releases:** 0.9.0 (2026-10-28): the release candidates' changes, the recompiled code page, a
+faster translator, game threads on the performance cores, the on-screen keyboard fix.
 
 **Launcher:** profiles and saves; trophies, with notices drawn by the game; settings shared with
 the in-game menu (runtime `8cbcf64`, launcher `1dc03d8`); the save editor (attributes, Blood

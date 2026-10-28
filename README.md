@@ -81,8 +81,8 @@ The [installation guide](docs/guide/installation.md) has the details.
 
 ## Status
 
-**Experimental, playable.** The latest release is **0.8.3**; **0.9.0 RC 2** is out as a
-pre-release, with online play, the save editor and the native Metal renderer by default. On an
+**Experimental, playable.** The latest release is **0.9.0**, with the native Metal renderer by
+default, online play, the save editor and the game's code compiled for your Mac on request. On an
 Apple M3 Pro at native 1080p the game runs at about **40 FPS** in play with the Metal renderer
 (median 42 over a 3-hour new game; [performance](docs/guide/performance.md)). Only one Mac has
 been measured so far: results on other Macs are welcome.
@@ -92,8 +92,7 @@ been measured so far: results on other Macs are welcome.
 | CPU: recompiling the game's code (R0–R4) | `████████████████████` 100% | Every function runs recompiled; the engine's render code is named |
 | Graphics: the native renderer (N0–N6) | `███████████████░░░░░` 76% | Native Metal by default; the engine's draws taken at its render boundary (N6, on a branch); next, shaders reading the engine's draw state (N2) |
 
-**Next:** 0.9.0 final; then N2, shaders that read the engine's draw state, and the recompiler's
-CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
+**Next:** N2, shaders that read the engine's draw state, and the recompiler's CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
 
 **Known issues:** blood on already killed enemies can look pale after a save reload; the camera
 after a cutscene sometimes starts in front of your character. See

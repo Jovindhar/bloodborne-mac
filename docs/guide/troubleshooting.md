@@ -37,7 +37,7 @@ Please do not report problems with this port to shadPS4 or to bbport.
 
 - **The Metal renderer is new** (the default since 0.9.0 RC 1). If the picture or stability is
   wrong with it, switch to MoltenVK (Advanced → Renderer) and report what you saw.
-- **Online play** (Seamless Hunt and The Hunter's Dream) is in 0.9.0 RC 2; seamless co-op (BBSC)
+- **Online play** (Seamless Hunt and The Hunter's Dream) is in 0.9.0; seamless co-op (BBSC)
   is not supported. A save changed with the save editor plays offline only.
 - *The Old Hunters*: the Game of the Year editions include it; add-on packages in
   `user/addcont/` are not tested on macOS.
@@ -46,6 +46,7 @@ Please do not report problems with this port to shadPS4 or to bbport.
 
 | Problem | Fixed in |
 |---|---|
+| Closing the on-screen keyboard after typing a name opened it again at once, several times in a row | 0.9.0 |
 | Opening the game's status page in the Lecture Building, or quitting, could stop the game with the Metal renderer | 0.9.0 RC 2 |
 | The Mods and Patches pages kept loading and found no mods or patches | 0.8.3 |
 | Character clothing lost its lighting at native 1440p after texture collection | 0.8.2 |

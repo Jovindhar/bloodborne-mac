@@ -10,10 +10,11 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 
 ## At a glance
 
-- **Released:** 0.9.0 RC 2 (pre-release), on 2026-10-28. The latest final release is 0.8.3.
+- **Released:** 0.9.0, on 2026-10-28: the native Metal renderer, online play, the save editor and
+  the recompiled code page ([notes](releases/v0.9.0.md)).
 - **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
   renderer ([performance](guide/performance.md)).
-- **Now:** deciding 0.9.0 final; accepting the native Metal renderer (N5).
+- **Now:** accepting the native Metal renderer (N5), with players' reports on 0.9.0.
 - **Under way** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its
   render boundary; mesh draws bind their resources from its draw state); N2, shaders built to
   read the draw state instead of the PS4 user data, has its plan and inventory (40%).
@@ -47,6 +48,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 
 | Version | Highlights |
 |---|---|
+| 0.9.0 | The release candidates' changes; the recompiled code page (the library built on the player's Mac); a faster translator; the game's threads on the performance cores; the on-screen keyboard no longer reopens after a name is typed |
 | 0.9.0 RC 2 | Online play; the save editor; the launcher's new look with Saves and Trophies tabs; in-game menus in its colours; a faster translator; macOS 15 |
 | 0.9.0 RC 1 | The native Metal renderer by default (MoltenVK as the fallback); MetalFX on the native frame; button prompts for the device in use; keyboard and mouse in the in-game menu |
 | 0.8.3 | Mods and Patches pages fixed; character editing in every language; optional FSR 4.1.1 on Metal; trophy notices drawn by the game |
@@ -61,21 +63,14 @@ hand.
 
 ## On main
 
-What main has beyond 0.9.0 RC 2:
+What main has beyond 0.9.0:
 
 - **R4** (bloodborne-recomp's `annotations/`): the engine's render boundary, the draw state,
   models, meshes, materials, shader programs, the synchronization primitives and the 20 busiest
   functions, named and described for N6 and the generator. `BB_DRAW_CENSUS=1` (runtime) counts the
   game's draws and locks at that boundary.
-- **The recompiled library from the launcher:** the *Recompiled code* page builds it on the
-  player's device with a downloaded LLVM toolchain and offers *Translated* or *Recompiled*
-  ([player guide](guide/performance.md#recompiled-code)).
-- **A faster translator** (bloodborne-recomp #17) and the runtime's own math and wide-string
-  calls (bloodborne-runtime #7): 3.6% less CPU per frame with the translator.
-- **The game's threads at macOS's user-interactive QoS** (bloodborne-runtime #8): kept on
-  performance cores; +2 FPS where the CPU sets the frame rate (an M1 Max in Yahar'gul), no change
-  on the GPU-bound M3 Pro. A translator fix for one float-to-integer conversion (bloodborne-recomp
-  #18).
+- **CI caches:** the app's and the runtime's workflows keep the built dependencies and a compiler
+  cache between runs.
 
 ## Areas
 
@@ -84,7 +79,7 @@ What main has beyond 0.9.0 RC 2:
 | CPU | bbcpu translates the game's x86-64 code to arm64 as it runs (the default); the recompiled library runs it compiled ahead of time from the player's own copy, with 14% less CPU time ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)) |
 | Graphics | Native Metal by default, without Vulkan or MoltenVK; MoltenVK selectable until N5 is accepted; Vulkan on Linux. Upscalers: MetalFX with the Metal renderer; FSR 3.1 and FSR 4.1.1 (run on the Mac's GPU) with MoltenVK ([native renderer](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md)) |
 | Game features | bbport 0.6's frame rate through hooks (F3 for 30 FPS), live effects, aspect ratios, keyboard and mouse, Laurence's cinematic above 30 FPS |
-| Online | Seamless Hunt and The Hunter's Dream (the runtime's `bbnet20`, GPL-3.0-or-later); tested here without an account, players are testing both pools with 0.9.0 RC 2. Seamless co-op (BBSC) is not supported |
+| Online | Seamless Hunt and The Hunter's Dream (the runtime's `bbnet20`, GPL-3.0-or-later); tested here without an account, players are testing both pools with 0.9.0. Seamless co-op (BBSC) is not supported |
 | Launcher | Profiles and saves with backups; trophies; the save editor (attributes, items, weapons, armor, gems; an edited save earns no trophies and plays offline only); settings shared with the in-game menu; mods and patches; 20 languages; platform-neutral code with CI on macOS, Linux and Windows ([launcher docs](https://github.com/bloodborne-native/bloodborne-launcher/tree/main/docs)) |
 
 ## Open issues
