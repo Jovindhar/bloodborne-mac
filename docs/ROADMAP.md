@@ -271,7 +271,10 @@ Decided 2026-10-27, in this order.
     names into the generated C (comments only: the code is the same); libGnm's 80 command buffer
     methods named.
   - [ ] R4.2, the draw boundary: the engine functions above libGnm's draws, shader, render target
-    and texture methods, named from their call graph.
+    and texture methods, named from their call graph. First pass done: CoreGraphics2's seven draw
+    and dispatch methods, the three state blocks they apply, the resource binder's steps and the
+    render-target passes (21 functions). Left: their callers, the shader resources step, and how
+    much of a frame goes through them (counted in the game).
   - [ ] R4.3, their objects: the draw context, meshes and materials as structs.
 - [ ] **The generator's CPU work, alongside:** flags only where they are read; a function's own
   stack frame as host locals when its address never escapes; memory ordering kept only for the
