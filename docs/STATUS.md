@@ -16,7 +16,7 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 - **Now:** deciding 0.9.0 final; accepting the native Metal renderer (N5).
 - **Under way** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its
   render boundary; mesh draws bind their resources from its draw state); N2, shaders built to
-  read the draw state instead of the PS4 user data, has its plan (20%).
+  read the draw state instead of the PS4 user data, has its plan and inventory (40%).
 - **Next:** the recompiler's CPU work.
 
 ## Milestones
@@ -36,7 +36,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 | N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
 | N5 · Metal backend | 95% `███████████████████░` | The default since 0.9.0 RC 1; the maintainer's play sessions passed; acceptance waits for players' reports on the release candidates and M1/M2 comparisons |
 | N6 · the engine's render boundary | 100% `████████████████████` | Done on the runtime's `n6` branch (re-scoped 2026-10-28): 99.94% of the engine's draws matched to their packets, their state and resources agreeing; every buffer address and resource slot found from the draw state; mesh draws bind their resources from it ([details](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). The other draw kinds move to N2: converted GCN shaders read the user data themselves, so taking draws over saves nothing until N2 |
-| N2 · shaders from the draw state, then ahead of time | 20% `████░░░░░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written ([steps](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time)). Next: the inventory of the shaders and how each reads its resources |
+| N2 · shaders from the draw state, then ahead of time | 40% `████████░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written ([steps](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time)). The inventory: the game's shaders use the PS4 user data only to locate their resources, so shaders bound to the draw state's slots need none. Next: mesh shaders built that way |
 | N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N2 |
 | **Platforms** | | |
 | macOS (Apple Silicon) | | Released |

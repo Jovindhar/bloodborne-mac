@@ -90,7 +90,7 @@ been measured so far: results on other Macs are welcome.
 | | Progress | |
 |---|---|---|
 | CPU: recompiling the game's code (R0–R4) | `████████████████████` 100% | Every function runs recompiled; the engine's render code is named |
-| Graphics: the native renderer (N0–N6) | `██████████████░░░░░░` 73% | Native Metal by default; the engine's draws taken at its render boundary (N6, on a branch); next, shaders reading the engine's draw state (N2) |
+| Graphics: the native renderer (N0–N6) | `███████████████░░░░░` 76% | Native Metal by default; the engine's draws taken at its render boundary (N6, on a branch); next, shaders reading the engine's draw state (N2) |
 
 **Next:** 0.9.0 final; then N2, shaders that read the engine's draw state, and the recompiler's
 CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
