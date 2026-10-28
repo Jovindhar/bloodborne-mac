@@ -15,7 +15,7 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
   renderer ([performance](guide/performance.md)).
 - **Now:** deciding 0.9.0 final; accepting the native Metal renderer (N5).
 - **Under way:** N6, the native renderer taking the engine's draws, on the runtime's `n6`
-  branch: the plan written, the draws and their output state observed (3 of 7 steps).
+  branch: the plan written; the draws, their output state and resources observed (4 of 7 steps).
 - **Next:** the recompiler's CPU work.
 
 ## Milestones
@@ -34,7 +34,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 | N0 · scope, N1 · frame planning | 100% `████████████████████` | Deferred clears |
 | N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
 | N5 · Metal backend | 95% `███████████████████░` | The default since 0.9.0 RC 1; the maintainer's play sessions passed; acceptance waits for players' reports on the release candidates and M1/M2 comparisons |
-| N6 · the engine's render boundary | 43% `████████░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written; 99.94% of the engine's draws matched to their packets, and every field of their draw and output state agrees with the decoded registers ([plan](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). Next: textures, samplers and buffers compared |
+| N6 · the engine's render boundary | 57% `███████████░░░░░░░░░` | On the runtime's `n6` branch: the plan written; 99.94% of the engine's draws matched to their packets; their draw and output state agree with the decoded registers, and the textures, samplers and buffers their shaders read are the draw state's ([plan](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). Next: mesh draws recorded from the draw state |
 | N2 · shaders ahead of time, N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N6 |
 | **Platforms** | | |
 | macOS (Apple Silicon) | | Released |
