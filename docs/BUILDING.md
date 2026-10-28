@@ -104,8 +104,8 @@ update checks compare correctly.
    dependency changed) it builds everything, about an hour. The launcher's checks run in its own
    CI, and here only in the weekly build.
 5. `git tag -a vX.Y.Z -m "..."` (a release candidate: `vX.Y.Z-rc.N`, published as a GitHub
-   pre-release that the launcher's update check skips; its notes say it is a candidate and what
-   feedback is wanted) and push the tag: `.github/workflows/macos.yml` builds the DMG and
+   pre-release: release builds' update check skips it, candidate builds are told about it; its
+   notes say it is a candidate and what feedback is wanted) and push the tag: `.github/workflows/macos.yml` builds the DMG and
    publishes the release with the notes, then posts it to the Discord server's `#releases`
    (`packaging/discord_release.py`: the notes' heading, their "What's new" list and known issues;
    the `DISCORD_RELEASES_WEBHOOK` secret). Check the run (`gh run list`), the release's asset and

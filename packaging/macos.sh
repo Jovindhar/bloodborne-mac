@@ -46,7 +46,10 @@ mkdir -p "$work"
 
 # The launcher (Tauri: React interface, Rust backend) makes the bundle the game goes into.
 cmp runtime/gpu/shim/trophy_catalog.json launcher/src/lib/trophy-text/trophy_catalog.json
-(cd launcher && { [[ -d node_modules ]] || npm ci; } && npx tauri build --bundles app)
+# A release tag (BB_VERSION, set by the workflow only for v* tags) goes into the launcher, so a
+# candidate's update check knows it is one; git describe's versions are not passed.
+(cd launcher && { [[ -d node_modules ]] || npm ci; } &&
+    BB_RELEASE_TAG=${BB_VERSION:-} npx tauri build --bundles app)
 cp -R launcher/src-tauri/target/release/bundle/macos/Bloodborne.app "$app"
 plutil -replace CFBundleShortVersionString -string "$short_version" "$app/Contents/Info.plist"
 plutil -replace CFBundleVersion -string "$version" "$app/Contents/Info.plist"

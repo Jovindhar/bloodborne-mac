@@ -65,10 +65,6 @@ In this order (maintainer, 2026-10-27; R4 was done first, on 2026-10-28):
 
 **Launcher:**
 
-- Release-candidate builds are not told about newer candidates or the final release: the update
-  check ignores pre-releases and compares the app's version, which is `0.9.0` in every 0.9.0
-  candidate (the launcher's `docs/UPDATES.md`). Players on 0.9.0 RC 1 or RC 2 were not told
-  about 0.9.0 (the release notes and the Discord post said so); fix it before the next candidates.
 - Import and export complete save sets; manage the backup history.
 
 **Graphics:**
@@ -145,6 +141,9 @@ Where each landed; the release notes say what changed for players.
 through hooks (F3 for 30 FPS); Laurence's cinematic above 30 FPS; effects switched live; aspect
 ratios; keyboard and mouse with a menu pointer; button prompts for the device in use; online
 (Seamless Hunt and The Hunter's Dream, runtime `49e2d2c`).
+
+**Release candidates learn of newer releases** (launcher `9466d2d`): a candidate build carries its
+tag and checks candidates too, so it is told about the next candidate and the final release.
 
 **Releases:** 0.9.0 (2026-10-28): the release candidates' changes, the recompiled code page, a
 faster translator, game threads on the performance cores, the on-screen keyboard fix.
