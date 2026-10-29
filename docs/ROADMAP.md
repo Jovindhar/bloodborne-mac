@@ -19,16 +19,22 @@ commit message, a code comment; the runtime's `docs/UPSTREAM.md` records them).
 
 ## Next
 
-In this order (maintainer, 2026-10-27; R4 was done first, on 2026-10-28):
+In this order (maintainer, 2026-10-28: the CPU work before N2's next step, which can save at most
+0.2–0.3 core of the draw-preparation threads):
 
-1. **N2, shaders from the draw state, then ahead of time** (runtime, on the `n6` branch with N6):
+1. **The recompiler's CPU work** (recomp and runtime), for CPUs weaker than the Mac's. Measured
+   first: clang already drops the flags nothing reads, plain accesses to private frames gain
+   nothing, and vector barriers hold about 2%. Now: the runtime's share of the game's main thread
+   (about 11% of its busy time): calls left to the translator (jump tables and six C library calls
+   done: 69,600 a second became 40,300, CPU time 342% to 339%), then the host-call path and
+   `rc_call`. After that, with the maintainer's conditions (the generator's analysis, a safety case
+   and a long play session): memory ordering kept only around the engine's synchronization, which
+   R4.4 named.
+2. **N2, shaders from the draw state, then ahead of time** (runtime, on the `n6` branch with N6):
    shaders built to read their resources from the engine's draw state, through the slots N6
    found, instead of the PS4 user data; mesh draws first, the other draw kinds after, then
    converted once ahead of time. Its steps are in that branch's
    [NATIVE_RENDERER.md](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time).
-2. **The generator's CPU work** (recomp): flags only where they are read; a function's own stack
-   frame as host locals when its address never escapes; memory ordering kept only around the
-   engine's synchronization, which R4.4 named. These matter most on CPUs weaker than the Mac's.
 3. **N3, textures as objects** (runtime).
 
 ## Later

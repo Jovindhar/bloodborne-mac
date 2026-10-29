@@ -16,10 +16,11 @@ own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/bl
 - **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
   renderer ([performance](guide/performance.md)).
 - **Now:** accepting the native Metal renderer (N5), with players' reports on 0.9.x.
-- **Under way** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its
-  render boundary; mesh draws bind their resources from its draw state); N2, shaders built to
-  read the draw state instead of the PS4 user data, has its plan and inventory (40%).
-- **Next:** the recompiler's CPU work.
+- **Under way:** the recompiler's CPU work: the runtime's share of the game's main thread (calls
+  left to the translator down 42%, CPU time 342% to 339%), then the host-call path.
+- **Paused** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its render
+  boundary; mesh draws bind their resources from its draw state); N2, shaders built to read the
+  draw state instead of the PS4 user data, has its plan and inventory (40%).
 
 ## Milestones
 
@@ -32,7 +33,7 @@ Each bar has 20 blocks, one per 5% of the milestone's defined steps.
 | R3 · speed | 100% `████████████████████` | 14% less CPU time than the translator at the same frame rate |
 | The library built from the launcher | 100% `████████████████████` | 13.5 minutes on an M3 Pro, no Xcode needed |
 | R4 · names for the engine's code | 100% `████████████████████` | 204 functions named; the draw state, models, materials and shaders described |
-| The generator's CPU work | 0% `░░░░░░░░░░░░░░░░░░░░` | Next after N2 |
+| The recompiler's CPU work | 30% `██████░░░░░░░░░░░░░░` | The first plan measured (flags, private frames, vector barriers: little or nothing); jump tables across blocks and six host C library calls: 342% to 339%; next, the host-call path |
 | **Graphics** (bloodborne-runtime) | | |
 | N0 · scope, N1 · frame planning | 100% `████████████████████` | Deferred clears |
 | N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
