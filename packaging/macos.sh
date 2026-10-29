@@ -57,6 +57,10 @@ cmp runtime/gpu/shim/trophy_catalog.json launcher/src/lib/trophy-text/trophy_cat
 cp -R launcher/src-tauri/target/release/bundle/macos/Bloodborne.app "$app"
 plutil -replace CFBundleName -string "$app_name" "$app/Contents/Info.plist"
 plutil -replace CFBundleDisplayName -string "$app_name" "$app/Contents/Info.plist"
+# BloodOnline has its own identifier, so macOS (Dock, Spotlight, Launch Services) does not mix it
+# up with the official app installed beside it. The player's data folder does not depend on it.
+plutil -replace CFBundleIdentifier -string "${BB_BUNDLE_ID:-io.github.jovindhar.bloodonline}" \
+    "$app/Contents/Info.plist"
 plutil -replace CFBundleShortVersionString -string "$short_version" "$app/Contents/Info.plist"
 plutil -replace CFBundleVersion -string "$version" "$app/Contents/Info.plist"
 
