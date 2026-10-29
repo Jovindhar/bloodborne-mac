@@ -10,11 +10,35 @@ How the app is put together. Each part has its own docs; this page says which pa
 |---|---|---|
 | **bloodborne-mac** (this one) | | Packages the macOS app and its DMG, publishes releases, holds the player guides and the roadmap |
 | [bloodborne-launcher](https://github.com/bloodborne-native/bloodborne-launcher) | `launcher/` | The launcher (Tauri: React and Rust): profiles, saves, settings, mods, patches, starting the game and tracking trophies |
-| [bloodborne-runtime](https://github.com/bloodborne-native/bloodborne-runtime) | `runtime/` | Runs the game: loads its executable, provides the PS4 system libraries, draws its graphics (Vulkan on MoltenVK, or Metal directly) |
+| [bloodborne-runtime](https://github.com/bloodborne-native/bloodborne-runtime) | `runtime/` | Runs the game: loads its executable, provides the PS4 system libraries, draws on native Metal by default or MoltenVK as a fallback |
 | [bloodborne-recomp](https://github.com/bloodborne-native/bloodborne-recomp) | `runtime/recomp/` | bbcpu, which runs the game's x86-64 code on arm64, and the recompiler that turns it into native code ahead of time |
 
 The runtime is built on [bbport](https://github.com/deadinside28/bloodborne_pc), the native Linux
 port this project started from, and on [shadPS4](https://github.com/shadps4-emu/shadPS4).
+
+## Where code lives
+
+Code lives where it changes, not where it was first needed (decided 2026-10-27, after the iOS
+proof of concept):
+
+- **The runtime and the recompiler know every platform the game can run on:** macOS, Linux and
+  iOS each behind the runtime's platform layer, selected by the build (a CMake preset), not
+  scattered through the code. A fix that one platform exposed but that is not about that platform
+  (the game's mutex, a recompiler pattern, a UI scale) goes to `main` for all of them, measured on
+  each. There are no per-platform forks of the runtime.
+- **A platform's app repository is the app on that platform:** its shell, build and signing
+  scripts, packaging, CI and releases, and what being an app there means (touch controls, file
+  sharing, system integration). bloodborne-mac is that for macOS; an iOS app would be
+  bloodborne-ios.
+- **The launcher is one codebase for every platform:** its layout already works on phone-sized
+  screens.
+
+The iOS proof of concept (the `ios-poc` branches of bloodborne-runtime and bloodborne-recomp, its
+[write-up](https://github.com/bloodborne-native/bloodborne-runtime/blob/ios-poc/docs/IOS_POC.md))
+also showed what keeps the runtime from being embedded: it is a program (`bb-probe`) started by
+`run.sh`, which prepares the game with bash and Python. iOS allows one process and neither tool,
+so the runtime has to become a library with a small C API, with the preparation in the runtime or
+the launcher. The steps are in the [roadmap](ROADMAP.md).
 
 ## The app
 
@@ -23,7 +47,7 @@ port this project started from, and on [shadPS4](https://github.com/shadps4-emu/
 | In the bundle | |
 |---|---|
 | `Contents/MacOS/` | the launcher, `bb-probe` (the game), `bb-gpu-capabilities`, bash |
-| `Contents/Frameworks/` | the runtime's GPU library, MoltenVK, the Vulkan loader, SDL3, FFmpeg |
+| `Contents/Frameworks/` | the runtime's GPU library, SDL3, FFmpeg, plus MoltenVK and the Vulkan loader for the fallback only |
 | `Contents/Resources/game/` | `run.sh`, the runtime's scripts and patches, the Vulkan driver manifest |
 | `Contents/Resources/python/` | a standalone Python 3 |
 
@@ -35,7 +59,7 @@ macOS asks the player to allow it once). Nothing else needs installing.
 1. The launcher checks the game folder (the runtime's `game_check.py`: the 1.09 executable), and
    makes a backup of the active profile's saves.
 2. It writes `bbport.ini` from its settings database, sets the environment (the profile's folder,
-   the renderer, the frame-rate mode, ...) and starts `run.sh` with the app's bash.
+   the selected renderer and frame-rate mode, ...) and starts `run.sh` with the app's bash.
 3. `run.sh` links the game's modules into one image, applies the patches and mods (a merged view;
    the game folder is never changed), sizes memory for the output, and starts `bb-probe`.
 4. The game runs through bbcpu (or the recompiled library), on the runtime's PS4 libraries and
@@ -50,15 +74,19 @@ and [profiles and saves](https://github.com/bloodborne-native/bloodborne-launche
 
 ## Where it is going: native code
 
-Translating the game's code works but costs CPU time, and every frame still goes through the
-PS4's command format and MoltenVK. Two milestones replace that:
+The game's code is translated while it runs, and every frame is the PS4's command buffers
+decoded into Metal calls. Two milestones replace both with native code; where each stands is in
+[Status](STATUS.md#milestones):
 
 - **The recompiler** turns the game's functions, from the player's own executable, into C
   compiled into a native library, checked against calls recorded from the original. Every
-  function is generated and the game runs on them; making that code cheaper than the translator
-  is next ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)).
-- **The native renderer** draws with each platform's own GPU API: a shared core with Vulkan and
-  Metal backends. The frame already draws through Metal behind an option; resources in Metal are
-  next ([Native renderer](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md)).
+  function runs recompiled, with less CPU time than the translator, and the launcher builds the
+  library on the player's Mac. R4 named the engine's render code, its synchronization and its
+  busiest functions, which the next steps use
+  ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)).
+- **The native renderer** draws with Metal directly on macOS, without Vulkan or MoltenVK (the
+  MoltenVK fallback stays selectable until N5 is accepted; Linux keeps its Vulkan backend). Next,
+  N6 takes the engine's draws at its own render boundary instead of decoding PS4 command buffers
+  ([Native renderer](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md)).
 
 Only the tools are published, never the game's code.

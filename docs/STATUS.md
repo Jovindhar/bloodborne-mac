@@ -1,83 +1,100 @@
-# Status and where to continue
+# Status
 
 [← Documentation](README.md)
 
-What development main has, what is open, and how to pick each thread up. Updated 2026-10-22.
-The plan as a checklist is the [roadmap](ROADMAP.md).
+Where the whole project stands: what is released, what is on main, what is being worked on and
+what comes next. Updated 2026-10-28. The plan in order: [Roadmap](ROADMAP.md). Each repository's
+own status: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md#progress),
+[recompiler](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md#milestones),
+[launcher](https://github.com/bloodborne-native/bloodborne-launcher/blob/main/README.md#status).
+
+## At a glance
+
+- **Released:** 0.9.1, on 2026-10-28: the shader cache no longer turns walls black after long play
+  ([notes](releases/v0.9.1.md)); 0.9.0, the same day, brought the native Metal renderer, online
+  play, the save editor and the recompiled code page ([notes](releases/v0.9.0.md)).
+- **Playable** on Apple Silicon: about 40 FPS in play at native 1080p on an M3 Pro with the Metal
+  renderer ([performance](guide/performance.md)).
+- **Now:** accepting the native Metal renderer (N5), with players' reports on 0.9.x.
+- **Under way:** the recompiler's CPU work: the runtime's share of the game's main thread (calls
+  left to the translator down 42%, CPU time 342% to 339%), then the host-call path.
+- **Paused** on the runtime's `n6` branch: N6 is done (the engine's draws observed at its render
+  boundary; mesh draws bind their resources from its draw state); N2, shaders built to read the
+  draw state instead of the PS4 user data, has its plan and inventory (40%).
+
+## Milestones
+
+Each bar has 20 blocks, one per 5% of the milestone's defined steps.
+
+| Milestone | Progress | State |
+|---|---|---|
+| **CPU** (bloodborne-recomp) | | |
+| R0–R2 · groundwork, prototype, every function recompiled | 100% `████████████████████` | The game runs on 240,978 recompiled functions; the translator remains the fallback |
+| R3 · speed | 100% `████████████████████` | 14% less CPU time than the translator at the same frame rate |
+| The library built from the launcher | 100% `████████████████████` | 13.5 minutes on an M3 Pro, no Xcode needed |
+| R4 · names for the engine's code | 100% `████████████████████` | 204 functions named; the draw state, models, materials and shaders described |
+| The recompiler's CPU work | 30% `██████░░░░░░░░░░░░░░` | The first plan measured (flags, private frames, vector barriers: little or nothing); jump tables across blocks and six host C library calls: 342% to 339%; next, the host-call path |
+| **Graphics** (bloodborne-runtime) | | |
+| N0 · scope, N1 · frame planning | 100% `████████████████████` | Deferred clears |
+| N4 · render adapter | 100% `████████████████████` | The renderer on the project's own GPU interface |
+| N5 · Metal backend | 95% `███████████████████░` | The default since 0.9.0 RC 1; the maintainer's play sessions passed; acceptance waits for players' reports on the release candidates and M1/M2 comparisons |
+| N6 · the engine's render boundary | 100% `████████████████████` | Done on the runtime's `n6` branch (re-scoped 2026-10-28): 99.94% of the engine's draws matched to their packets, their state and resources agreeing; every buffer address and resource slot found from the draw state; mesh draws bind their resources from it ([details](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n6-the-engines-render-boundary)). The other draw kinds move to N2: converted GCN shaders read the user data themselves, so taking draws over saves nothing until N2 |
+| N2 · shaders from the draw state, then ahead of time | 40% `████████░░░░░░░░░░░░` | On the runtime's `n6` branch: the plan written ([steps](https://github.com/bloodborne-native/bloodborne-runtime/blob/n6/docs/NATIVE_RENDERER.md#n2-shaders-from-the-draw-state-then-ahead-of-time)). The inventory: the game's shaders use the PS4 user data only to locate their resources, so shaders bound to the draw state's slots need none. Next: mesh shaders built that way |
+| N3 · textures as objects | 0% `░░░░░░░░░░░░░░░░░░░░` | After N2 |
+| **Platforms** | | |
+| macOS (Apple Silicon) | | Released |
+| iOS | proof of concept | 23 FPS on an iPhone 17 Pro Max; the steps to a real app are in the roadmap |
+| Linux | runtime only | The Vulkan backend builds and passes its tests (manual CI); no app |
 
 ## Releases
 
 | Version | Highlights |
 |---|---|
-| 0.8.3 | Mods and Patches pages fixed; character editing in every language; optional FSR 4.1.1 on Metal; trophy notices drawn by the game; instanced tessellated draws on Metal |
-| 0.8.2 | High-resolution character lighting fixed after texture collection |
-| 0.8.1 | GX worker crash fixed; MetalFX option; tessellation shader and recurring shader-cache rebuild fixed |
-| 0.8.0 | Motion-vector crash fixed; settings shared with the in-game menu; outputs above 1080p; the experimental Metal renderer; FPS counter sizes; memory estimate; trophy notices only over the game |
+| 0.9.1 | The shader cache no longer reuses a shader's slot, which drew walls and scenery black after long play; caches are rebuilt once; the draw-preparation threads about 10% less busy |
+| 0.9.0 | The release candidates' changes; the recompiled code page (the library built on the player's Mac); a faster translator; the game's threads on the performance cores; the on-screen keyboard no longer reopens after a name is typed |
+| 0.9.0 RC 2 | Online play; the save editor; the launcher's new look with Saves and Trophies tabs; in-game menus in its colours; a faster translator; macOS 15 |
+| 0.9.0 RC 1 | The native Metal renderer by default (MoltenVK as the fallback); MetalFX on the native frame; button prompts for the device in use; keyboard and mouse in the in-game menu |
+| 0.8.3 | Mods and Patches pages fixed; character editing in every language; optional FSR 4.1.1 on Metal; trophy notices drawn by the game |
+| 0.8.2 | High-resolution character lighting fixed |
+| 0.8.1 | GX worker crash fixed; MetalFX; the shader cache no longer rebuilds every launch |
+| 0.8.0 | Motion-vector crash fixed; settings shared with the in-game menu; outputs above 1080p; the experimental Metal renderer |
 | 0.7.0 | Stretched geometry fixed; local trophies |
 | 0.6.0 | Profiles and saves; the opening-video crash fixed |
 
-Imported bbport compatibility: 0.51, plus parts of 0.6 (below).
+Release notes: [docs/releases](releases/). bbport compatibility: 0.51, plus parts of 0.6 ported by
+hand.
 
 ## On main
 
+Main is 0.9.1, plus:
+
+- **R4** (bloodborne-recomp's `annotations/`): the engine's render boundary, the draw state,
+  models, meshes, materials, shader programs, the synchronization primitives and the 20 busiest
+  functions, named and described for N6 and the generator. `BB_DRAW_CENSUS=1` (runtime) counts the
+  game's draws and locks at that boundary.
+- **CI caches:** the app's and the runtime's workflows keep the built dependencies and a compiler
+  cache between runs: a release build takes about 25 minutes instead of 60.
+
+## Areas
+
 | Area | State |
 |---|---|
-| bbport 0.6 | Ported: renderer fixes, the present's wait, frame rate through hooks (no measurable cost; F3 for 30 FPS), Laurence's cinematic fixes, live effects, aspect ratios, keyboard and mouse. Next: online ([roadmap](ROADMAP.md#3-bbport-06-before-the-next-release)) |
-| Hooks in the game's code | bbport's `InstallGuestCodeHook` interface on bbcpu: a stub `int3; replaced instructions; jmp back`, every register available to the hook |
-| Metal renderer | The frame draws through Metal behind Advanced → Renderer (65.5/61.7 against 58.0/58.1 FPS on MoltenVK); it runs with the recompiled library. The repeatable native-1080p GX worker crash is fixed. MetalFX is an optional upscaler on either renderer |
-| FSR 4.1.1 on Metal | AMD's neural upscaler in Metal on Apple Silicon (runtime #1, from fsr4-native-macos), offered when the Mac can run it and the player has added AMD's model files from their own DLL. M3 Pro, 1080p Balanced: 4.2–4.8 ms of GPU time a frame, a few FPS below FSR 3.1 |
-| High-resolution character lighting | 0.8.2 keeps GPU-written images whose contents cannot safely be downloaded. Native 1440p clothing highlights returned on Metal and MoltenVK in copied-save runs. On main they are freed again over the critical memory mark (memory before lighting); native 1440p on the 18 GB M3 Pro stays about 2.4 GB below it |
-| Trophy notifications | The game draws notices in its ImGui overlay after a persisted unlock; the launcher imports and lists unlocked trophies |
-| Save editor | The launcher previews characters and edits all six attributes, Blood Echoes and Insight in a backed-up, staged save set; level and saved HP or stamina follow attribute changes. Max all reaches level 544. Edited saves cannot earn new trophies |
-| Docs | One English set per repository; wikis mirror them |
+| CPU | bbcpu translates the game's x86-64 code to arm64 as it runs (the default); the recompiled library runs it compiled ahead of time from the player's own copy, with 14% less CPU time ([Recompilation](https://github.com/bloodborne-native/bloodborne-recomp/blob/main/docs/RECOMPILATION.md)) |
+| Graphics | Native Metal by default, without Vulkan or MoltenVK; MoltenVK selectable until N5 is accepted; Vulkan on Linux. Upscalers: MetalFX with the Metal renderer; FSR 3.1 and FSR 4.1.1 (run on the Mac's GPU) with MoltenVK ([native renderer](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/NATIVE_RENDERER.md)) |
+| Game features | bbport 0.6's frame rate through hooks (F3 for 30 FPS), live effects, aspect ratios, keyboard and mouse, Laurence's cinematic above 30 FPS |
+| Online | Seamless Hunt and The Hunter's Dream (the runtime's `bbnet20`, GPL-3.0-or-later); tested here without an account, players are testing both pools with 0.9.0. Seamless co-op (BBSC) is not supported |
+| Launcher | Profiles and saves with backups; trophies; the save editor (attributes, items, weapons, armor, gems; an edited save earns no trophies and plays offline only); settings shared with the in-game menu; mods and patches; 20 languages; platform-neutral code with CI on macOS, Linux and Windows ([launcher docs](https://github.com/bloodborne-native/bloodborne-launcher/tree/main/docs)) |
 
-## Open threads
+## Open issues
 
-**After 0.8.2.** The repeatable GX worker crash on Metal and MoltenVK was the live dynamic-shadow
-setting re-enabling shadows in a secondary context without a shadow target. A separate null guest
-virtual call seen once on Metal has not recurred. A
-[GXRenderThread null read in Cathedral Ward](https://github.com/bloodborne-native/bloodborne-mac/issues/3)
-has a different signature and is not confirmed fixed; a nearby save is needed to reproduce it.
-The [FSR 3.1 dark picture on an M5](https://github.com/bloodborne-native/bloodborne-mac/issues/2)
-is also unconfirmed: the reported resolution and upscaler settings rendered normally on this M3
-Pro in both 0.8.0 and current main. The reporter's check on 0.8.2 is needed.
-Check the frame-rate hooks in play (running above 90 FPS, cloth, Laurence's cinematic; needs a
-save near it).
-
-**Metal renderer, next.** The
-[render adapter](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/RENDER_ADAPTER.md)
-is approved: the renderer moves onto the project's own GPU interface (steps A0–A6, Vulkan
-backend), then a Metal backend creates every resource in Metal and MoltenVK leaves the macOS
-build (M1–M4). A0–A6 are done: the renderer runs on the adapter with the Vulkan backend
-(its own vocabulary, resources, commands, pipelines that hold their shaders, the host passes,
-frames, the swapchain interface and the upscalers' images). Next: M1, the Metal backend's
-device and resources. Shaders ahead of time follow (N2). The fork we adapt from is
-[Wooloomooloo2/bloodborne_mac_port](https://github.com/Wooloomooloo2/bloodborne_mac_port)
-(we took `0b50589` and `78b59f5`; its "M2" `3ee456f` creates resources in Metal).
-
-**Recompiled code speed (R3).** The library runs the whole game but takes 20–30% more CPU than
-the translator. Candidates are listed in bloodborne-recomp's CLAUDE.md. The launcher does not
-offer it yet (a "CPU: Translator / Recompiled" option is a candidate).
-
-**Watch list.** A short white flash in the opening video and an enemy's body drawn as colour
-noise have not recurred in recent play. Neither has a confirmed fix. Older rare assertions are in
-the runtime's [stability notes](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/STABILITY.md).
-
-**Online.** bbport 0.6's module (Seamless Hunt with BBSC co-op, The Hunter's Dream) needs its
-dependencies in `deps/`, its hooks on our base, and the maintainer's decision on edited saves.
-
-## Keep in step
-
-- Memory: `run.sh` sizes the game's memory; the launcher (`src/lib/data/memory.ts`) and the
-  in-game menu (`MemoryEstimate` in `bbport_overlay.cpp`) estimate it the same way.
-- Settings the menu shows: the runtime's `bbport_settings.cpp` and the launcher's
-  `settings_store.rs` (`GAME_SYNCED`).
-- Versions: the app and the launcher.
-
-## Test notes
-
-- Test games are background-only apps (`SDL_MAC_BACKGROUND_APP=1`): they never become the active
-  app, so focus and Cmd+Q behave unlike a launcher game. `BB_BENCH_FOREGROUND=1` for a test the
-  maintainer plays in.
-- The runtime's macOS CI runs on every push and cancels older runs; wait for a run whose result
-  matters before pushing again. Linux CI is started by hand for now, while the work is on macOS.
+- **Known bugs:** blood on already killed enemies can look pale after a save reload; the camera
+  after a cutscene sometimes starts in front of the character. Causes not isolated.
+- **Watch list:** a short white flash in the opening video and an enemy drawn as colour noise
+  have not recurred, without a confirmed fix. A GXRenderThread crash in Cathedral Ward
+  ([#3](https://github.com/bloodborne-native/bloodborne-mac/issues/3)) and a crash on death in
+  Central Yharnam ([#5](https://github.com/bloodborne-native/bloodborne-mac/issues/5)) could not be
+  reproduced and are closed until they happen again. Older rare assertions: the runtime's
+  [stability notes](https://github.com/bloodborne-native/bloodborne-runtime/blob/main/docs/STABILITY.md).
+- **Only one Mac measured** (M3 Pro); results from M1, M2 and M4 Macs are needed for N5's
+  acceptance.
+- **Tests:** five GPU tests no longer compile and are not run (roadmap, Later).

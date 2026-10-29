@@ -1,5 +1,7 @@
 <h1 align="center">bloodborne-mac</h1>
 
+<p align="center"><a href="https://discord.gg/QS6vHz45xA"><img src="https://img.shields.io/badge/Discord-join%20the%20server-5865F2?logo=discord&logoColor=white" alt="Discord"></a></p>
+
 <p align="center">
   <strong>Bloodborne, running natively on Apple Silicon.</strong><br>
   A macOS port of the PS4 game, with a launcher app and an in-game settings menu. No Rosetta 2.
@@ -59,7 +61,7 @@
 - **Native on Apple Silicon:** the game's x86-64 code is translated to arm64 as it runs.
 - **One app, nothing else to install:** download, open, choose your game folder, play.
 - **A launcher** ([bloodborne-launcher](https://github.com/bloodborne-native/bloodborne-launcher)) with graphics, controls, game options, mods, patches and the game's log.
-- **AMD FSR 3.1 upscaling,** the biggest performance gain on Apple GPUs.
+- **Upscalers,** optional: Apple MetalFX and AMD FSR 3.1.
 - **An in-game settings menu** (F1, or L3 + R3 on a controller).
 - **Controllers, keyboard and mouse,** with mapping for all three; the mouse turns the camera and
   points in the game's menus.
@@ -79,32 +81,22 @@ The [installation guide](docs/guide/installation.md) has the details.
 
 ## Status
 
-**Experimental, playable.** The game boots, loads saves and plays with sound, controllers and
-saving. On an Apple M3 Pro at 1080p with FSR 3.1 it runs at about **60 FPS** in the Hunter's Dream
-and about **44 FPS** in the clinic at the start of the game
-([performance](docs/guide/performance.md)). Only one machine has been tested so far: results on
-other Macs are welcome.
+**Experimental, playable.** The latest release is **0.9.1**, with the native Metal renderer by
+default, online play, the save editor and the game's code compiled for your Mac on request. On an
+Apple M3 Pro at native 1080p the game runs at about **40 FPS** in play with the Metal renderer
+(median 42 over a 3-hour new game; [performance](docs/guide/performance.md)). Only one Mac has
+been measured so far: results on other Macs are welcome.
 
-**New in 0.8.2:** clothing lighting at high render resolutions no longer disappears after texture
-collection. The fix was checked at native 1440p on Metal and MoltenVK.
-[0.8.2 release notes](docs/releases/v0.8.2.md).
+| | Progress | |
+|---|---|---|
+| CPU: recompiling the game's code (R0–R4) | `████████████████████` 100% | Every function runs recompiled; the engine's render code is named |
+| Graphics: the native renderer (N0–N6) | `███████████████░░░░░` 76% | Native Metal by default; the engine's draws taken at its render boundary (N6, on a branch); next, shaders reading the engine's draw state (N2) |
 
-**From 0.8.1:** the repeatable GX worker crash with live dynamic shadows is fixed on Metal and
-MoltenVK; a rejected tessellation pipeline no longer makes the shader cache rebuild every launch;
-and **MetalFX (Apple)** is an optional macOS upscaler. The big FPS overlay shows MetalFX and its
-render resolution. [0.8.1 release notes](docs/releases/v0.8.1.md).
+**Next:** N2, shaders that read the engine's draw state, and the recompiler's CPU work. Details: [Status](docs/STATUS.md) and [Roadmap](docs/ROADMAP.md).
 
-**From 0.8.0:** character motion vectors no longer crash the game; the launcher and the
-in-game menu share every setting, and the menu has the launcher's look, tabs and an on-screen
-keyboard; outputs above 1080p start again; an experimental **Metal renderer** (Advanced →
-Renderer) draws the game with Apple's Metal directly, usually faster; from bbport 0.6, a frame
-rate that keeps physics right at any speed, effects that switch without a restart, aspect ratios
-(16:10, 21:9, ...) and keyboard and mouse in Dark Souls III's layout. See
-[Release notes](docs/releases/v0.8.0.md).
-
-**Known issues:** blood on already killed enemies can look pale after a save reload.
-See [Troubleshooting](docs/guide/troubleshooting.md#known-issues) for details and other things to
-know before playing.
+**Known issues:** blood on already killed enemies can look pale after a save reload; the camera
+after a cutscene sometimes starts in front of your character. See
+[Troubleshooting](docs/guide/troubleshooting.md#known-issues).
 
 ## Documentation
 
@@ -126,13 +118,13 @@ The app is built from four repositories:
 |---|---|
 | **bloodborne-mac** (this one) | The macOS app: packaging, releases, player guides |
 | [bloodborne-launcher](https://github.com/bloodborne-native/bloodborne-launcher) | The independent launcher source, included here as `launcher/` |
-| [bloodborne-runtime](https://github.com/bloodborne-native/bloodborne-runtime) | Loads the game: the PS4 system libraries and the Vulkan renderer (MoltenVK), here as `runtime/` |
+| [bloodborne-runtime](https://github.com/bloodborne-native/bloodborne-runtime) | Loads the game and PS4 system libraries; native Metal is the macOS default, with MoltenVK as a fallback, here as `runtime/` |
 | [bloodborne-recomp](https://github.com/bloodborne-native/bloodborne-recomp) | bbcpu, which translates the game's x86-64 code to arm64 as it runs, and the recompiler (`runtime/recomp/`) |
 
 **The recompiler** turns the game's code, from the player's own copy, into native code ahead of
 time, checked against calls recorded from the original. Every one of the game's functions is
-generated and the game runs on them; the work now is making that faster than the translator.
-Only the tool is published, never the game's code
+generated and the game runs on them, with less CPU time than the translator; the launcher builds
+the library on the player's Mac. Only the tool is published, never the game's code
 ([status](https://github.com/bloodborne-native/bloodborne-recomp/wiki/Recompilation-status)). The
 recompiler and its CPU layer don't depend on macOS: other platforms can build on them.
 
@@ -143,13 +135,18 @@ recompiler and its CPU layer don't depend on macOS: other platforms can build on
 Built on [**bbport**](https://github.com/deadinside28/bloodborne_pc) by deadinside28, the native
 Linux port this project started from as a fork, and on [**shadPS4**](https://github.com/shadps4-emu/shadPS4):
 the loader, the PS4 runtime, the renderer and its extensions, the upscalers and the game patches
-come from them; bbport's releases are merged up to 0.51 and ported in parts from 0.6. Native Apple
+come from them; bbport's releases are merged up to 0.51 and ported in parts from 0.6. Native
+Metal rendering also uses shader and pipeline work first published by
+[**Huax-1839/bloodborne-macos**](https://github.com/Huax-1839/bloodborne-macos), adapted through
+[**Wooloomooloo2/bloodborne_mac_port**](https://github.com/Wooloomooloo2/bloodborne_mac_port).
 Metal FSR 4.1.1 upscaling is based on [**fsr4-native-macos**](https://github.com/UzenUPoZiTiV4ik/fsr4-native-macos)
 by UzenUPoZiTiV4ik. This work adds the macOS
 platform layer, the arm64 translator, the app and the recompiler. None of it would exist without
 the projects it is built on. Full list: [Credits and licenses](docs/CREDITS.md).
 
-Licensed under the [GNU GPL v2 or later](LICENSE).
+Licensed under the [GNU GPL v2 or later](LICENSE). The online module (the runtime's `gpu/bbnet20`) includes droogie/bbhost's
+GPL-3.0-or-later code, so that module, and the app that ships it, are under the
+[GNU GPL v3 or later](https://www.gnu.org/licenses/gpl-3.0.html).
 
 <sub>Not affiliated with shadPS4, Sony Interactive Entertainment, FromSoftware or AMD. Please do
 not report problems with this project to shadPS4 or to bbport.</sub>

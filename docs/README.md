@@ -7,6 +7,12 @@
 > bbport and can be less stable. For the dedicated macOS port of bbport, see
 > [bmy/bbport-mac](https://github.com/bmy/bbport-mac).
 
+## Where things stand
+
+- [Status](STATUS.md): what is released and on main, every milestone's progress, what is being
+  worked on now and what comes next.
+- [Roadmap](ROADMAP.md): the plan in order (now, next, later), and what is done.
+
 ## Playing
 
 1. [Installation](guide/installation.md): download, first start, where your data lives.
@@ -25,8 +31,6 @@
 
 - [Architecture](ARCHITECTURE.md): the four repositories, the app, a launch, where it is going.
 - [Building and releasing](BUILDING.md)
-- [Status and where to continue](STATUS.md)
-- [Roadmap](ROADMAP.md): the plan as a checklist.
 - Each part's own docs: [runtime](https://github.com/bloodborne-native/bloodborne-runtime/tree/main/docs),
   [recompiler](https://github.com/bloodborne-native/bloodborne-recomp/tree/main/docs),
   [launcher](https://github.com/bloodborne-native/bloodborne-launcher/tree/main/docs).

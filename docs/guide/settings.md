@@ -12,7 +12,7 @@ runs.
 
 | Tab | What it has |
 |---|---|
-| **Home** | Your profile and trophies, the game folder and edition, a summary of the main settings |
+| **Home** | The game folder and edition, a summary of the main settings |
 | **Graphics** | Aspect ratio and output resolution with a memory estimate, monitor, fullscreen, V-Sync, frame-rate mode and limit, the FPS counter, upscaling and sharpening, character motion vectors, model detail, visual effects |
 | **Controls** | Which controller to use, and button mapping for controller and keyboard |
 | **Game** | Game language, skipping the intro videos, your save folder |
@@ -26,9 +26,11 @@ runs.
 ![The in-game settings menu](../screenshots/game-menu.jpg)
 
 Press **F1** on the keyboard, or **L3 + R3** on a controller. The menu has the launcher's
-Graphics, Game and Advanced tabs. **L1/R1** switch tabs and **Circle** closes it. Most settings
+Graphics, Game and Advanced tabs. **L1/R1** (keyboard: **Q/E**) switch tabs and **Circle**
+(**Escape**) goes back; the hints at the bottom follow the device you used last. Most settings
 apply at once; those that need a restart say so, and **Restart** applies them. A controller can
-type text (the character's name) on an on-screen keyboard.
+type text (the character's name) on an on-screen keyboard, and the mouse can click its keys
+(right click cancels).
 
 ## What applies at once
 
@@ -44,10 +46,10 @@ Advanced options apply at the next start.
 
 ## Recommended settings
 
-On a Mac the game is limited by the GPU, so the upscaler matters most:
-
-- **Upscaler:** FSR 3.1 with the *Balanced* or *Performance* preset.
-- **AMD FSR 4.1.1 (Metal):** AMD's neural upscaler (its Lite model), run on the Mac's GPU. It
+- **Upscaler:** off (native resolution), the default. In current builds the upscalers are slower
+  than native 1080p on a Mac ([performance](performance.md)). With the Metal renderer the only
+  upscaler is MetalFX; FSR 3.1 and FSR 4.1.1 are for the MoltenVK renderer.
+- **AMD FSR 4.1.1 (Metal), MoltenVK renderer only:** AMD's neural upscaler (its Lite model), run on the Mac's GPU. It
   costs more than FSR 3.1: on an M3 Pro at 1080p output (Balanced), 4.8 ms of GPU time a frame,
   about 40 instead of 46 FPS. It suits Macs with frame-rate headroom, or a 30 FPS limit. It needs
   two files of AMD's model from your own copy of AMD's upscaler DLL
@@ -59,9 +61,11 @@ On a Mac the game is limited by the GPU, so the upscaler matters most:
 - **Output above 1080p:** use an upscaler preset; the memory estimate (Graphics, and the menu)
   shows what the game will use against your Mac's memory, in amber above three quarters of it.
   Without an upscaler above 1440p, characters are drawn black (a known issue).
-- **Renderer** (Advanced → Performance): MoltenVK is the default. **Metal (experimental)** draws
-  with Apple's Metal directly and was about 10% faster on an M3 Pro; switch back if anything
-  looks wrong.
+- **Renderer** (Advanced → Performance): **Metal**, the default, draws with Apple's Metal directly
+  and is about 25–30% faster than MoltenVK at native 1080p on an M3 Pro (about 39 against 31 FPS
+  in the same place). MoltenVK stays available while Metal is new; switch to it if anything looks
+  wrong, and report it. Native Metal does not load the Vulkan driver; selecting MoltenVK loads it
+  for that run.
 
 See [Performance](performance.md).
 
@@ -110,4 +114,9 @@ inside menus), **G** gestures. Click into the window to give it the mouse; **F1*
 
 The mouse turns the camera directly (no stick dead zone or speed limit), and points and clicks
 in the game's menus: hover selects, left click confirms, right click goes back, the wheel
-scrolls. Every key can be remapped on the **Controls** tab.
+scrolls. Every key can be remapped on the **Controls** tab, also to a combination with Shift,
+Ctrl or Alt.
+
+**Button prompts** follow the device you used last: with the keyboard and mouse the game's own
+hints ("Examine", item pick-ups, tutorials) show the bound key or mouse button, with an Xbox or
+another controller that controller's buttons, with a PlayStation controller the game's icons.

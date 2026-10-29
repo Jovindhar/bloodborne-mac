@@ -8,7 +8,8 @@ with the CPU layer and recompiler in `runtime/recomp/` (bloodborne-recomp); the 
 ## Read first
 
 - `docs/STATUS.md`: what main has, what is open, where to continue.
-- `docs/ROADMAP.md`: the plan as a checklist; tick items (with where they landed) as work lands.
+- `docs/ROADMAP.md`: the plan (Now, Next, Later, Not taken, Done); an item moves to Done, with
+  where it landed, when the work lands.
 - `docs/ARCHITECTURE.md`, `docs/BUILDING.md` (build, working across submodules, releasing).
 - Each submodule's CLAUDE.md and docs for its own work.
 
@@ -16,6 +17,7 @@ with the CPU layer and recompiler in `runtime/recomp/` (bloodborne-recomp); the 
 
 - `launcher/`, `runtime/`: submodules (see above).
 - `packaging/macos.sh`: `Bloodborne.app` and its DMG in `dist/`, from `runtime/`'s build.
+- `tools/wikigen.py`: every repository's wiki generated from its docs (`docs/BUILDING.md`).
 - `.github/workflows/macos.yml`: a `v*` tag builds and publishes a release; manual runs build a
   test package.
 - `docs/guide/`: player guides (the only copy; the launcher's docs are for developers).
@@ -41,12 +43,17 @@ come from the game (`runtime/tools/grab.sh`), in English, never from the user's 
   `~/Library/Application Support/bloodborne_mac/` (never written by tests).
 - The clone is `~/projects/bloodborne/bloodborne-mac` (VS Code workspace:
   `~/projects/bloodborne/bloodborne.code-workspace`). `runtime/deps/` records absolute paths.
+  The iOS app is `~/projects/bloodborne/bloodborne-ios` (private; in the same workspace); its
+  `runtime/deps` and `runtime/recomp/out` link to this clone's.
 - Metal System Traces need `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer`.
 - **REA** (https://github.com/morluto/rea) is an MCP server here with the Ghidra provider
   (Ghidra 12.1.4, Java 21; `JAVA_HOME` and `GHIDRA_INSTALL_DIR` in `~/.zshrc`): decompiling,
-  cross-references and call graphs of `runtime/recomp/out/eboot.elf`. Its output is game code:
-  use it to understand, never commit it or paste it into docs, issues or wikis.
-- An Apple M3 Pro (18 GB): a healthy run in the Hunter's Dream is ~58–68 FPS.
+  cross-references and call graphs of the game's executable (open
+  `runtime/recomp/out/recomp/eboot_ghidra.elf`; its MCP entry in `~/.claude.json` sets a 6 GB
+  heap and a longer startup deadline; recomp's CLAUDE.md has the details). Its output is game
+  code: use it to understand, never commit it or paste it into docs, issues or wikis.
+- An Apple M3 Pro (18 GB): a healthy run with the defaults (Metal renderer, native 1080p, no
+  upscaler) reads 38.2–39.6 FPS standing in Cathedral Ward (the runtime's `docs/BUILDING.md`).
 - The old `PabloVSouza/bloodborne_mac` repository only points to the four repositories.
 
 ## Working rules (all four repositories)
@@ -74,6 +81,10 @@ come from the game (`runtime/tools/grab.sh`), in English, never from the user's 
 - **Testing the game:** `runtime/tools/test_run.sh NAME [VAR=...]` (a copy of the save; the real
   one is never written), one game at a time (`pgrep -x bb-probe` first). Test windows open on the
   user's screen: say so before long batches, and stop when asked.
+- **Every test run says what it tests, on screen:** `TEST_TITLE="..." TEST_DETAIL="..."
+  runtime/tools/test_run.sh NAME ...` puts a banner at the top of the game's window (the title defaults to
+  NAME). The title names the test and the build (e.g. "M2 skeleton: new build"); the detail
+  says the settings and what is being checked. Never start a test window without them.
 - **Never capture the user's screen.** Pictures come from the game: `tools/grab.sh`.
 - **Shell:** no `rm -rf` on variable paths; no `xargs ... sh -c '...'`.
 - **Docs:** plain, precise English; numbers measured, not guessed. Docs say what is true now;
